@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>CKD Prediction</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+      charset="UTF-8"
+    />
+    />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript
+      ><link rel="stylesheet" href="assets/css/noscript.css"
+    /></noscript>
+  </head>
+  <body
+    class="is-preload"
+    style="
+      background-image: linear-gradient(
+          to top,
+          rgba(46, 49, 65, 0.8),
+          rgba(46, 49, 65, 0.8)
+        ),
+        url(images/bigney.jpg);
+    "
+  >
+    <!-- Page Wrapper -->
+    <div id="page-wrapper">
+      <!-- Header -->
+      <header id="header">
+        <h1><a href="index.html">Nicolás Pavón</a></h1>
+        <nav>
+          <a href="#menu">Menu</a>
+        </nav>
+      </header>
+
+      <!-- Menu -->
+      <nav id="menu">
+        <div class="inner">
+          <h2>Menu</h2>
+          <ul class="links">
+            <li><a href="index.html">CV</a></li>
+            <li><a href="data_cleaning.html">Data cleaning examples</a></li>
+          </ul>
+          <a href="#" class="close">Close</a>
+        </div>
+      </nav>
+
+      <!-- Wrapper -->
+      <section id="wrapper">
+        <header id="kidney-header">
+          <div class="inner">
+            <h2>PREDICTING CHRONIC KIDNEY DISEASE</h2>
+          </div>
+        </header>
+
+        <!-- Content -->
+        <div class="wrapper">
+          <div class="inner">
+            <section>
+              <h3 class="major">The issue:</h3>
+              <p>
+                Across the globe, many people are dealing with kidney diseases.
+                These can show up suddenly due to various risk factors like what
+                they eat, their surroundings, and how they live. Checking for
+                these diseases can be invasive, expensive, and slow. It might
+                even be risky. This is why, especially in places with limited
+                resources, lots of patients don't get diagnosed and treated
+                until their kidney disease is already advanced. So, finding ways
+                to spot these diseases early is really important, especially in
+                developing countries where late diagnosis is common.
+              </p>
+
+              <h3 class="major">The data:</h3>
+              <p>
+                There are many datasets containing information of patients with
+                this desease that can be worked on to achieve our objective,
+                predict chronic kidney disease. In this case we are going to use
+                the dataset provided by the UCI repository. Looking at the
+                description of the dataset and the data itself we can define the
+                types and roles of the attributes:
+              </p>
+            </section>
+
+            <section>
+              <h3 class="major">Dataset info:</h3>
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Abbreviation</th>
+                      <th>UCI Description</th>
+                      <th>Observed type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Age</td>
+                      <td>age</td>
+                      <td>Numerical</td>
+                      <td>Integer</td>
+                    </tr>
+                    <tr>
+                      <td>Blood Pressure</td>
+                      <td>bp</td>
+                      <td>Numerical</td>
+                      <td>Real (in mm/Hg)</td>
+                    </tr>
+                    <tr>
+                      <td>Specific Gravity</td>
+                      <td>sg</td>
+                      <td>Nominal</td>
+                      <td>Polynomial (1.005, 1.010, 1.015, 1.020, 1.025)</td>
+                    </tr>
+                    <tr>
+                      <td>Albumin</td>
+                      <td>al</td>
+                      <td>Nominal</td>
+                      <td>Polynomial (0, 1, 2, 3, 4, 5)</td>
+                    </tr>
+                    <tr>
+                      <td>Sugar</td>
+                      <td>su</td>
+                      <td>Nominal</td>
+                      <td>Polynomial (0, 1, 2, 3, 4, 5)</td>
+                    </tr>
+                    <tr>
+                      <td>Red Blood Cells</td>
+                      <td>rbc</td>
+                      <td>Nominal</td>
+                      <td>Binary (normal, abnormal)</td>
+                    </tr>
+                    <tr>
+                      <td>Pus Cell</td>
+                      <td>pc</td>
+                      <td>Nominal</td>
+                      <td>Binary (normal, abnormal)</td>
+                    </tr>
+                    <tr>
+                      <td>Pus Cell Clumps</td>
+                      <td>pcc</td>
+                      <td>Nominal</td>
+                      <td>Binary (present, notpresent)</td>
+                    </tr>
+                    <tr>
+                      <td>Bacteria</td>
+                      <td>ba</td>
+                      <td>Nominal</td>
+                      <td>Binary (present, notpresent)</td>
+                    </tr>
+                    <tr>
+                      <td>Blood Glucose Random</td>
+                      <td>bgr</td>
+                      <td>Numerical</td>
+                      <td>Real (bgr in mgs/dl)</td>
+                    </tr>
+                    <tr>
+                      <td>Blood Urea</td>
+                      <td>bu</td>
+                      <td>Numerical</td>
+                      <td>Real (bu in mgs/dl)</td>
+                    </tr>
+                    <tr>
+                      <td>Serum Creatinine</td>
+                      <td>sc</td>
+                      <td>Numerical</td>
+                      <td>Real (sc in mgs/dl)</td>
+                    </tr>
+                    <tr>
+                      <td>Sodium</td>
+                      <td>sod</td>
+                      <td>Numerical</td>
+                      <td>Real (sod in mEq/L)</td>
+                    </tr>
+                    <tr>
+                      <td>Potassium</td>
+                      <td>pot</td>
+                      <td>Numerical</td>
+                      <td>Real (pot in mEq/L)</td>
+                    </tr>
+                    <tr>
+                      <td>Hemoglobin</td>
+                      <td>hemo</td>
+                      <td>Numerical</td>
+                      <td>Real (hemo in gms)</td>
+                    </tr>
+                    <tr>
+                      <td>Packed Cell Volume</td>
+                      <td>pcv</td>
+                      <td>Numerical</td>
+                      <td>Real</td>
+                    </tr>
+                    <tr>
+                      <td>White Blood Cell Count</td>
+                      <td>wc</td>
+                      <td>Numerical</td>
+                      <td>Real (wc in cells/cumm)</td>
+                    </tr>
+                    <tr>
+                      <td>Red Blood Cell Count</td>
+                      <td>rc</td>
+                      <td>Numerical</td>
+                      <td>Real (rc in millions/cmm)</td>
+                    </tr>
+                    <tr>
+                      <td>Hypertension</td>
+                      <td>htn</td>
+                      <td>Nominal</td>
+                      <td>Binary (yes, no)</td>
+                    </tr>
+                    <tr>
+                      <td>Diabetes Mellitus</td>
+                      <td>dm</td>
+                      <td>Nominal</td>
+                      <td>Binary (yes, no)</td>
+                    </tr>
+                    <tr>
+                      <td>Coronary Artery Disease</td>
+                      <td>cad</td>
+                      <td>Nominal</td>
+                      <td>Binary (yes, no)</td>
+                    </tr>
+                    <tr>
+                      <td>Appetite</td>
+                      <td>appet</td>
+                      <td>Nominal</td>
+                      <td>Binary (good, poor)</td>
+                    </tr>
+                    <tr>
+                      <td>Pedal Edema</td>
+                      <td>pe</td>
+                      <td>Nominal</td>
+                      <td>Binary (yes, no)</td>
+                    </tr>
+                    <tr>
+                      <td>Anemia</td>
+                      <td>ane</td>
+                      <td>Nominal</td>
+                      <td>Binary (yes, no)</td>
+                    </tr>
+                    <tr>
+                      <td>Class</td>
+                      <td>class</td>
+                      <td>Nominal</td>
+                      <td>Binary, and label (ckd, notckd)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+            <section>
+              <h3 class="major">Importing the data</h3>
+              <p>
+                When importing the data, we noticed that it's necessary to
+                modify the types of several attributes because RapidMiner didn't
+                do a good job automatically.
+              </p>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/rm/upload.png" alt=""
+                /></span>
+              </div>
+              <p>
+                We observe that most of the attributes are recognized as
+                'polynomial,' even though only a few of them should be. We edit
+                all the attributes, assigning the types defined in the table
+                above. Remove rows that might cause issues (for example, if a
+                row contains 'no' in the 'class' column. It could be interpreted
+                as 'notckd,' but since it's a single value and we are not
+                certain, removing it won't cause problems). Finally, we renamed
+                the attributes to make their names more descriptive and easier
+                to work with.
+              </p>
+            </section>
+            <section>
+              <h3 class="major">Statistics</h3>
+              <p>
+                Once the data is loaded into RM, we can study the following
+                statistics:
+              </p>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/rm/stats1.png" alt=""
+                /></span>
+              </div>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/rm/stats2.png" alt=""
+                /></span>
+              </div>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/rm/stats3.png" alt=""
+                /></span>
+              </div>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/rm/stats4.png" alt=""
+                /></span>
+              </div>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/rm/stats5.png" alt=""
+                /></span>
+              </div>
+              <p>
+                From the statistics, we highlight the following observations:
+              </p>
+              <ul>
+                <li>
+                  It's a dataset with many missing values for various
+                  attributes.
+                </li>
+                <li>The 'class' attribute is fairly balanced.</li>
+                <li>
+                  The 'potassium' column contains 2 outliers: we assume that a
+                  decimal point was omitted in the input, as the values 47 and
+                  39 would make more sense if they were 4.7 and 3.9.
+                  <ul>
+                    <li>
+                      We edit these datapoints in the dataset and rerun the
+                      statistics.
+                    </li>
+                    <div class="box alt">
+                      <div class="row gtr-uniform">
+                        <div class="col-4">
+                          <span class="image fit"
+                            ><img src="images/rm/prepot.png" alt="" />
+                            <p><i>Before</i></p></span
+                          >
+                        </div>
+                        <li class="icon solid fa-arrow-right"></li>
+                        <div class="col-4">
+                          <span class="image fit"
+                            ><img src="images/rm/pot.png" alt="" />
+                            <p><i>After</i></p></span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </ul>
+                </li>
+                <li>
+                  The 'sodium' column contains another outlier of value 4,5
+                  (values range between 100 - 163)
+                  <ul>
+                    <li>
+                      Since there are many missing values (87) for this column,
+                      we just delete this value, and running the statistics
+                      again we can see the next improvements:
+                    </li>
+                    <div class="box alt">
+                      <div class="row gtr-uniform">
+                        <div class="col-4">
+                          <span class="image fit"
+                            ><img src="images/rm/presalt.png" alt="" />
+                            <p><i>Before</i></p></span
+                          >
+                        </div>
+                        <li class="icon solid fa-arrow-right"></li>
+                        <div class="col-4">
+                          <span class="image fit"
+                            ><img src="images/rm/salt.png" alt="" />
+                            <p><i>After</i></p></span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </ul>
+                </li>
+                <li>
+                  We see in the initial statistics that some attributes are
+                  heavily unbalanced. This can be improved using logarithmic or
+                  exponential funcions to balance the data an improve results.
+                  <ul>
+                    <li>Blood pressure</li>
+                    <li>Albumin</li>
+                    <li>Sugar</li>
+                    <li>Blood glucose random</li>
+                    <li>Blood urea</li>
+                  </ul>
+                </li>
+                <li>
+                  We have observed that the Serum creatinine levels appear to be
+                  significantly unbalanced. Upon closer examination of the data,
+                  we have identified values such as 76, 32, and 24 mg/dl, which
+                  are considerably elevated for a typical individual. A brief
+                  research indicates that normal values typically range from 0.7
+                  to 1.3 mg/dl, significantly lower than the values that have
+                  raised suspicion. Nonetheless, it's important to consider that
+                  these values could be attributed to an unwell patient, making
+                  them potentially valid. As a result, we have decided to retain
+                  these values in their current form. However, we will remain
+                  vigilant regarding their potential impact in the future and
+                  conduct a more thorough investigation to determine whether
+                  they should be classified as outliers.
+                </li>
+              </ul>
+            </section>
+            <section>
+              <h3 class="major">Dealing with missing values</h3>
+              <p>
+                When examining the statistics, we notice a substantial presence
+                of missing values. Dealing with this issue offers several
+                approaches. We can choose to substitute them with averages or
+                logically derived data, remove rows containing missing values
+                entirely, or employ machine learning methods to predict the
+                missing values based on available data.
+              </p>
+              <p>
+                Nevertheless, it's essential to be cautious with these
+                techniques, as they might introduce inaccurate data into the
+                system, potentially compromising or deteriorating the final
+                outcome. Additionally, some algorithms are capable of
+                accommodating missing values. Therefore, in our initial version,
+                we will work with the missing values in their current state. If
+                we identify room for improvement, we can explore these
+                techniques at a later stage.
+              </p>
+            </section>
+            <section>
+              <h3 class="major">Studying correlated attributes</h3>
+              <p>
+                Once in RapidMiner we can quicly make use of the
+                <i>Correlation matrix</i> operator to find out more info about
+                these attributes
+              </p>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/rm/correla.png" alt=""
+                /></span>
+              </div>
+              <p>
+                At first sight we cant find heavily correlated attributes. The
+                most correlation is between the <b>class</b> atribute with
+                <b>Hemoglobin</b>, <b>packed cell volume</b> and
+                <b>red blood count</b>. However the correlation value does not
+                exceed 0.77, so for now we will leave it as it is.
+              </p>
+            </section>
+            <section>
+              <h3 class="major">Modelling</h3>
+              <p>
+                Now to the fun part! We will start processing the data with some
+                ML models to find out if we can predict the target value. Since
+                we are going to try to classify new incoming data into two
+                possible outcomes <i>ckd</i> and <i>notckd</i>, we can clearly
+                identify this as a classification problem, therefore we will
+                make use of classification models.
+              </p>
+              <p>
+                Some classification models that we can make ous of are
+                <b>Logistic regression</b>, <b>Linear discriminant analysis</b>,
+                <b>KNN</b> and <b>Naive bayes</b>
+              </p>
+              <h4 class="major">Validation</h4>
+              <p>
+                To assess the performance of the models, we will employ the
+                <b>Cross-Validation</b> operator from RM, using a 5-fold
+                strategy. Cross-validation involves dividing the dataset into
+                five subsets, and the model is trained and validated five times.
+                Each fold serves as the validation set exactly once, ensuring
+                thorough assessment. This approach not only utilizes all
+                available data but also tests the model's ability to generalize
+                to unseen data, making it a robust validation method.
+              </p>
+              <h4 class="major">Feature selection</h4>
+              <p>
+                We can see that there are many attributes with information here.
+                Some of these attributes may not be useful, and may also impact
+                negatively not only the performance in terms of efficiency, but
+                the outcome itself.
+              </p>
+              <p>
+                To analyze these attributes in search of the most useful ones,
+                we can employ various techniques. However, we will opt for the
+                RM operator called <b>Optimize Selection (evolutionary)</b>.
+                This operator essentially repeats the entire process multiple
+                times, selecting different attributes each time and evaluating
+                their performance. Ultimately, this operator will help us
+                identify the most useful attributes, resulting in improved
+                performance. On a side note, we choose 'evolutionary' because it
+                is the option most likely to prevent reaching a local maximum.
+              </p>
+              <h3 class="major">Logistic regression</h3>
+              <p>
+                Lets work with the first algorithm, logistic regression. We plug
+                it in the cross validation operator and press play
+              </p>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/rm/lrpro2.png" alt=""
+                /></span>
+              </div>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/rm/lrpro.png" alt=""
+                /></span>
+              </div>
+              <p>After it finishes processing we look at the results:</p>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/rm/lrresults.png" alt=""
+                /></span>
+              </div>
+              <h3>100%! 🤯</h3>
+              <p>
+                Seems a little too good to be true, doesn't it? There may be
+                some issues with the data that leads to such a good, but false
+                outcome. Also, playing around with the operators we observed
+                that the <b>Optimize Selection</b> operator raised the
+                performance from 98% to 100%. Even tough this may be a
+                misleading result, we will keep working with the other models to
+                see how they perform.
+              </p>
+            </section>
+            <section>
+              <h3 class="major">Linear discriminant analysis</h3>
+              <p>
+                LDA does not support working with missing values, but we are
+                going to try it anyways filling the data with average values.
+                This is not a good idea because its made up information, but we
+                are going to try it anyways just to see how it performs. Also,
+                it doesn't support binomial or polynomial attributes. To solve
+                this we will use the operator <b>Nominal to numerical</b>, which
+                will transform the values of binomial and polynomial attributes
+                to numerical ones.
+              </p>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/rm/ldapre.png" alt=""
+                /></span>
+              </div>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/rm/ldacross.png" alt=""
+                /></span>
+              </div>
+              <p>After it finishes processing we look at the results:</p>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/rm/ldaresults.png" alt=""
+                /></span>
+              </div>
+              <h3>96.48% 😎</h3>
+              <p>
+                Not bad to have so many made up values. playing around with the
+                operators we found out that when leaving out the rows with
+                missing values (a lot of rows), it had a 61% success
+                performance, and autocompleting missing values upgraded it to
+                90%. This is probably due to the very little examples in the
+                dataset that have all the attributes complete. Also we noted
+                that the operator <b>Optimize Selection</b>
+                raised the performance from 90% to 96%! We can clearly see that
+                this operator rocks.
+              </p>
+            </section>
+            <section>
+              <h3 class="major">KNN</h3>
+              <p>
+                KNN or k-nearest neighbours is a computationally expensive
+                algorithm, but since we wont be working with a huge dataset we
+                will try it out and see how it performs.
+              </p>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/rm/knnconf.png" alt=""
+                /></span>
+              </div>
+              <p>After it finishes processing we look at the results:</p>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/rm/knnper.png" alt=""
+                /></span>
+              </div>
+              <h3>98.99% 😱</h3>
+              <p>
+                Really good performance! We accomplished this after some
+                tweaking with the knn operator parameters, and also some data
+                preprocessing. Running it in the first instance resulted in 61%
+                performance. After that we implemented the
+                <b>Normalize</b> operator, which normalized every attribute.
+                This is especially good for KNN, upgrading it's peformance to
+                91%. After this we tweaked the <b>k</b> parameter of the KNN
+                operator, finding out that the values around "25" turned out to
+                be the most performant ones, upgrading the performance to
+                95.49%. Lastly, we used the trusty operator
+                <b>Optimize Selection</b>, reaching the showed result, almost
+                99%🚀.
+              </p>
+            </section>
+            <section>
+              <h3 class="major">Naive Bayes</h3>
+              <p>
+                This algorithm assumes independence of features and may not work
+                well with highly correlated features. However as we saw
+                previously there are no higly correlated attributes, so we are
+                going to give it a chance and see how it performs:
+              </p>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/rm/naiveconf.png" alt=""
+                /></span>
+              </div>
+              <p>After it finishes processing we look at the results:</p>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/rm/naiveper.png" alt=""
+                /></span>
+              </div>
+              <h3>100% 🤑</h3>
+              <p>
+                Again, amazing performance. And the operator
+                <b>Optimize Selection</b>, did it's thing again, turning an
+                already optimal 99% efficiency to a 100%.
+              </p>
+            </section>
+            <section>
+              <h2 class="major">Conclusions</h2>
+              <p>
+                All these performances seem too good to be true, and this is a
+                bit unsetteling. However after some time thinking of reasons it
+                may work <i>too good</i>, I couldn't find a satisfactory
+                explanation. After all, thanks to the
+                <b>cross validation</b> operator, the models should not be
+                suffering of overfitting, which should be a reason to have such
+                high performance. To continue working on this, the best approach
+                to further validate the models would be to use another dataset
+                that is very similar and already classified, and test the
+                performances to see if it actually works as well as it shows.
+                Lastly, the MVP of this study case will be the operator
+                <b>Optimize Selection</b>, wich optimized every model, from a
+                resource efficiency point of view, to the overall performance of
+                all of them. 🥳
+              </p>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <section id="footer">
+        <div class="inner">
+          <ul class="copyright">
+            <li>&copy; Nicolás Pavón Inc. All rights reserved.</li>
+            <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrollex.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>
