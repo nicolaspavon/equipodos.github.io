@@ -2473,6 +2473,11 @@ input, select, textarea {
 				width: 100%;
 			}
 
+	.circle-image {
+		aspect-ratio: 1;
+		object-fit: cover;
+	}
+
 /* List */
 
 	ol {
