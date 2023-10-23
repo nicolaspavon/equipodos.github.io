@@ -1,0 +1,1941 @@
+<!DOCTYPE html>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>Supervivientes del Titanic</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+      charset="UTF-8"
+    />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript
+      ><link rel="stylesheet" href="assets/css/noscript.css"
+    /></noscript>
+  </head>
+  <body
+    class="is-preload"
+    style="
+      background-image: linear-gradient(
+          to top,
+          rgba(46, 49, 65, 0.8),
+          rgba(46, 49, 65, 0.8)
+        ),
+        url(images/titanic_survivors/titanic-bell.jpg);
+    "
+  >
+    <!-- Page Wrapper -->
+    <div id="page-wrapper">
+      <!-- Header -->
+      <header id="header">
+        <h1><a href="index.html">Inicio</a></h1>
+        <nav>
+          <a href="#menu">Menu</a>
+        </nav>
+      </header>
+
+      <!-- Menu -->
+      <nav id="menu">
+        <div class="inner">
+          <h2>Menú</h2>
+          <ul class="links">
+            <li><a href="index.html">CV</a></li>
+            <li><a href="data_cleaning.html">Data cleaning examples</a></li>
+          </ul>
+          <a href="#" class="close">Close</a>
+        </div>
+      </nav>
+
+      <!-- Wrapper -->
+      <section id="wrapper">
+        <header id="titanic-header">
+          <div class="inner">
+            <h2>PREDICCIÓN DE SUPERVIVIENTES DEL TITANIC</h2>
+          </div>
+        </header>
+
+        <!-- Content -->
+        <div class="wrapper">
+          <div class="inner">
+            <section>
+              <h3 class="major">
+                Un caso bastante conocido en Machine Learning
+              </h3>
+              <p>
+                En este caso de estudio, se describe el proceso básico de
+                creación de un modelo de aprendizaje automático, es decir,
+                comprender el problema y los datos, manejar los valores
+                faltantes, realizar ingeniería de características, crear ajustar
+                y optimizar un modelo, así como evaluar el rendimiento del
+                mismo.
+              </p>
+              <p>
+                Este caso de estudio se basa en el trabajo realizado por Samson
+                Qian en
+                <a
+                  href="https://www.kaggle.com/code/samsonqian/titanic-guide-with-sklearn-and-eda"
+                  >Titanic: Guide with sklearn and EDA</a
+                >, publicado para una competición de Kaggle:
+                <a href="https://www.kaggle.com/competitions/titanic"
+                  >Titanic - Machine Learning from Disaster</a
+                >.
+              </p>
+
+              <h3 class="major">Importando librerías necesarias</h3>
+              <p>
+                Lo primero es lo primero: dado que vamos a utilizar numpy,
+                pandas, seaborn, matplotlib y algunos de los paquetes de
+                scikit-learn, necesitamos importarlos. Para esto, tenemos el
+                siguiente bloque de código. Ten en cuenta que también importamos
+                y mostramos lo que hay en la carpeta <strong>/content</strong>,
+                como sugiere el comentario. Deberíamos ver los conjuntos de
+                datos de entrenamiento y prueba. Este último paso asume que
+                tenemos ambos conjuntos de datos en la carpeta mencionada. Por
+                lo tanto, si deseas seguir y reproducir este notebook, asegúrate
+                de tener acceso a los conjuntos de datos y de que estén en la
+                carpeta <strong>/content</strong>. Aunque, en realidad, puedes
+                guardarlos en otra carpeta y modificar el código para leer los
+                conjuntos de datos desde esa carpeta, si así lo prefieres. Por
+                cierto, puedes obtener los conjuntos de datos de la competición
+                <a href="https://www.kaggle.com/competitions/titanic"
+                  >Titanic - Machine Learning from Disaster</a
+                >.
+              </p>
+
+              <pre><code>import numpy as np
+import pandas as pd
+
+from sklearn.svm import SVC, LinearSVC
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import make_scorer, accuracy_score
+from sklearn.model_selection import GridSearchCV, train_test_split
+
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+import seaborn as sns
+from matplotlib import pyplot as plt
+sns.set_style("whitegrid")
+%matplotlib inline
+
+import warnings
+warnings.filterwarnings("ignore")
+
+import os
+# You should see the training and testing datasets listed below.
+print(os.listdir("/content"))
+</code></pre>
+
+              <p>
+                Después de ejecutar el bloque de código anterior, deberías ver
+                los conjuntos de datos listados. Además, ahora tenemos las
+                bibliotecas necesarias para el resto del proceso, así que
+                continuemos.
+              </p>
+
+              <h3 class="major">Cargando y viendo el dataset</h3>
+
+              <p>
+                Carguemos ambos conjuntos de datos y examinémoslos, comenzando
+                con el conjunto de datos de entrenamiento.
+              </p>
+
+              <pre><code># Read the datasets
+training = pd.read_csv("/content/train.csv")
+testing = pd.read_csv("/content/test.csv")
+
+# Inspect training dataset
+training.head()
+</code></pre>
+
+              <p>Después de ejecutar el código, vemos la siguiente tabla:</p>
+
+              <table border="1">
+                <thead>
+                  <tr style="text-align: right">
+                    <th></th>
+                    <th>PassengerId</th>
+                    <th>Survived</th>
+                    <th>Pclass</th>
+                    <th>Name</th>
+                    <th>Sex</th>
+                    <th>Age</th>
+                    <th>SibSp</th>
+                    <th>Parch</th>
+                    <th>Ticket</th>
+                    <th>Fare</th>
+                    <th>Cabin</th>
+                    <th>Embarked</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>0</th>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>3</td>
+                    <td>Braund, Mr. Owen Harris</td>
+                    <td>male</td>
+                    <td>22.0</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>A/5 21171</td>
+                    <td>7.2500</td>
+                    <td>NaN</td>
+                    <td>S</td>
+                  </tr>
+                  <tr>
+                    <th>1</th>
+                    <td>2</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>Cumings, Mrs. John Bradley (Florence Briggs Th...</td>
+                    <td>female</td>
+                    <td>38.0</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>PC 17599</td>
+                    <td>71.2833</td>
+                    <td>C85</td>
+                    <td>C</td>
+                  </tr>
+                  <tr>
+                    <th>2</th>
+                    <td>3</td>
+                    <td>1</td>
+                    <td>3</td>
+                    <td>Heikkinen, Miss. Laina</td>
+                    <td>female</td>
+                    <td>26.0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>STON/O2. 3101282</td>
+                    <td>7.9250</td>
+                    <td>NaN</td>
+                    <td>S</td>
+                  </tr>
+                  <tr>
+                    <th>3</th>
+                    <td>4</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>Futrelle, Mrs. Jacques Heath (Lily May Peel)</td>
+                    <td>female</td>
+                    <td>35.0</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>113803</td>
+                    <td>53.1000</td>
+                    <td>C123</td>
+                    <td>S</td>
+                  </tr>
+                  <tr>
+                    <th>4</th>
+                    <td>5</td>
+                    <td>0</td>
+                    <td>3</td>
+                    <td>Allen, Mr. William Henry</td>
+                    <td>male</td>
+                    <td>35.0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>373450</td>
+                    <td>8.0500</td>
+                    <td>NaN</td>
+                    <td>S</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <p>
+                Ahora tenemos una idea del esquema del conjunto de datos de
+                entrenamiento. Observa que con solo echar un vistazo, notamos
+                que la variable objetivo (Survived) parece ser un valor
+                categórico, con posibles valores de 0 o 1. Lo mismo se aplica a
+                Pclass (clase de pasajero), Sex (que es masculino o femenino),
+                entre otros. Pero hay algo más que debería captar nuestra
+                atención de inmediato: esos valores 'NaN' para el predictor
+                Cabin ―parece que tenemos valores faltantes, lo cual es algo que
+                sabemos cómo manejar, y lo haremos en la siguiente sección.
+              </p>
+
+              <p>Ahora examinemos el conjunto de datos de prueba:</p>
+
+              <pre><code># Inspect testing dataset
+testing.head()
+</code></pre>
+
+              <p>El resultado es el siguiente:</p>
+
+              <table border="1">
+                <thead>
+                  <tr style="text-align: right">
+                    <th></th>
+                    <th>PassengerId</th>
+                    <th>Pclass</th>
+                    <th>Name</th>
+                    <th>Sex</th>
+                    <th>Age</th>
+                    <th>SibSp</th>
+                    <th>Parch</th>
+                    <th>Ticket</th>
+                    <th>Fare</th>
+                    <th>Cabin</th>
+                    <th>Embarked</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>0</th>
+                    <td>892</td>
+                    <td>3</td>
+                    <td>Kelly, Mr. James</td>
+                    <td>male</td>
+                    <td>34.5</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>330911</td>
+                    <td>7.8292</td>
+                    <td>NaN</td>
+                    <td>Q</td>
+                  </tr>
+                  <tr>
+                    <th>1</th>
+                    <td>893</td>
+                    <td>3</td>
+                    <td>Wilkes, Mrs. James (Ellen Needs)</td>
+                    <td>female</td>
+                    <td>47.0</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>363272</td>
+                    <td>7.0000</td>
+                    <td>NaN</td>
+                    <td>S</td>
+                  </tr>
+                  <tr>
+                    <th>2</th>
+                    <td>894</td>
+                    <td>2</td>
+                    <td>Myles, Mr. Thomas Francis</td>
+                    <td>male</td>
+                    <td>62.0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>240276</td>
+                    <td>9.6875</td>
+                    <td>NaN</td>
+                    <td>Q</td>
+                  </tr>
+                  <tr>
+                    <th>3</th>
+                    <td>895</td>
+                    <td>3</td>
+                    <td>Wirz, Mr. Albert</td>
+                    <td>male</td>
+                    <td>27.0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>315154</td>
+                    <td>8.6625</td>
+                    <td>NaN</td>
+                    <td>S</td>
+                  </tr>
+                  <tr>
+                    <th>4</th>
+                    <td>896</td>
+                    <td>3</td>
+                    <td>Hirvonen, Mrs. Alexander (Helga E Lindqvist)</td>
+                    <td>female</td>
+                    <td>22.0</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>3101298</td>
+                    <td>12.2875</td>
+                    <td>NaN</td>
+                    <td>S</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <p>
+                Notamos que el conjunto de datos de prueba tiene la misma
+                estructura que el conjunto de datos de entrenamiento,
+                simplemente falta la variable objetivo, ya que es el conjunto de
+                pruebas, por supuesto. Echemos un vistazo a cuáles son las
+                características numéricas reales:
+              </p>
+
+              <pre><code># Inspect the numerical features
+types_train = training.dtypes
+num_values = types_train[(types_train == float)]
+
+print("These are the numerical features:")
+print(num_values)
+</code></pre>
+
+              <p>El resultado es el siguiente:</p>
+
+              <pre><code>These are the numerical features:
+Age     float64
+Fare    float64
+dtype:  object
+</code></pre>
+
+              <p>
+                Además, podemos verificar algunas otras características del
+                conjunto de datos utilizando la función
+                <strong>describe()</strong>:
+              </p>
+
+              <pre><code>training.describe()</code></pre>
+
+              <p>Esto genera la siguiente tabla:</p>
+
+              <table border="1">
+                <thead>
+                  <tr style="text-align: right">
+                    <th></th>
+                    <th>PassengerId</th>
+                    <th>Survived</th>
+                    <th>Pclass</th>
+                    <th>Age</th>
+                    <th>SibSp</th>
+                    <th>Parch</th>
+                    <th>Fare</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>count</th>
+                    <td>891.000000</td>
+                    <td>891.000000</td>
+                    <td>891.000000</td>
+                    <td>714.000000</td>
+                    <td>891.000000</td>
+                    <td>891.000000</td>
+                    <td>891.000000</td>
+                  </tr>
+                  <tr>
+                    <th>mean</th>
+                    <td>446.000000</td>
+                    <td>0.383838</td>
+                    <td>2.308642</td>
+                    <td>29.699118</td>
+                    <td>0.523008</td>
+                    <td>0.381594</td>
+                    <td>32.204208</td>
+                  </tr>
+                  <tr>
+                    <th>std</th>
+                    <td>257.353842</td>
+                    <td>0.486592</td>
+                    <td>0.836071</td>
+                    <td>14.526497</td>
+                    <td>1.102743</td>
+                    <td>0.806057</td>
+                    <td>49.693429</td>
+                  </tr>
+                  <tr>
+                    <th>min</th>
+                    <td>1.000000</td>
+                    <td>0.000000</td>
+                    <td>1.000000</td>
+                    <td>0.420000</td>
+                    <td>0.000000</td>
+                    <td>0.000000</td>
+                    <td>0.000000</td>
+                  </tr>
+                  <tr>
+                    <th>25%</th>
+                    <td>223.500000</td>
+                    <td>0.000000</td>
+                    <td>2.000000</td>
+                    <td>20.125000</td>
+                    <td>0.000000</td>
+                    <td>0.000000</td>
+                    <td>7.910400</td>
+                  </tr>
+                  <tr>
+                    <th>50%</th>
+                    <td>446.000000</td>
+                    <td>0.000000</td>
+                    <td>3.000000</td>
+                    <td>28.000000</td>
+                    <td>0.000000</td>
+                    <td>0.000000</td>
+                    <td>14.454200</td>
+                  </tr>
+                  <tr>
+                    <th>75%</th>
+                    <td>668.500000</td>
+                    <td>1.000000</td>
+                    <td>3.000000</td>
+                    <td>38.000000</td>
+                    <td>1.000000</td>
+                    <td>0.000000</td>
+                    <td>31.000000</td>
+                  </tr>
+                  <tr>
+                    <th>max</th>
+                    <td>891.000000</td>
+                    <td>1.000000</td>
+                    <td>3.000000</td>
+                    <td>80.000000</td>
+                    <td>8.000000</td>
+                    <td>6.000000</td>
+                    <td>512.329200</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <p>
+                Por último, podemos echar un vistazo a la cantidad de ejemplos
+                en cada dataset:
+              </p>
+
+              <pre><code># Inspect the amount of examples on each dataset
+print("Training examples: {}".format(training.shape[0]))
+print("Testing examples: {}".format(testing.shape[0]))
+</code></pre>
+
+              <p>
+                La salida indica que tenemos 891 ejemplos de entrenamiento y 418
+                ejemplos de prueba, lo que significa que estamos trabajando con
+                una división de aproximadamente 0.68 (68%) para entrenamiento y
+                0.32 (32%) para pruebas:
+              </p>
+
+              <pre><code>Training examples: 891
+Testing examples: 418
+</code></pre>
+
+              <p>
+                Ahora que sabemos más sobre el conjunto de datos de
+                entrenamiento y sus características, ocupémonos de los valores
+                faltantes que notamos anteriormente.
+              </p>
+
+              <h3 class="major">Ocupándonos de los valores faltantes</h3>
+
+              <p>
+                Antes de examinar los valores faltantes, creemos una función de
+                utilidad para imprimir los valores faltantes, ya que seguramente
+                la necesitaremos más adelante.
+              </p>
+
+              <pre><code>def null_table(training, testing):
+print("Training dataset missing values:\n{}".format(pd.isnull(training).sum()))
+print("\nTesting dataset missing values:\n{}".format(pd.isnull(testing).sum()))
+</code></pre>
+
+              <p>
+                Ahora que tenemos esta función, utilicémosla para ver cuántos
+                valores faltantes tiene el conjunto de datos por atributo.
+              </p>
+
+              <pre><code># Inspect amount of missing values
+null_table(training, testing)
+</code></pre>
+
+              <p>La salida es la siguiente:</p>
+
+              <pre><code>Training dataset missing values:
+PassengerId      0
+Survived         0
+Pclass           0
+Name             0
+Sex              0
+Age            177
+SibSp            0
+Parch            0
+Ticket           0
+Fare             0
+Cabin          687
+Embarked         2
+dtype: int64
+
+Testing dataset missing values:
+PassengerId      0
+Pclass           0
+Name             0
+Sex              0
+Age             86
+SibSp            0
+Parch            0
+Ticket           0
+Fare             1
+Cabin          327
+Embarked         0
+dtype: int64
+</code></pre>
+
+              <p>
+                Parece que el dataset de entrenamiento contiene 177 valores
+                faltantes para el atributo 'Age', 687 valores faltantes para
+                'Cabin' y 2 para 'Embarked', mientras que el conjunto de datos
+                de prueba tiene 86 valores faltantes para 'Age' y 327 para
+                'Cabin'. En otras palabras, tenemos aproximadamente un ~77% de
+                valores faltantes para 'Cabin' en el conjunto de entrenamiento y
+                ~78% para el mismo atributo en el conjunto de pruebas. Mientras
+                tanto, los 177 valores faltantes de 'Age' en el entrenamiento
+                constituyen aproximadamente un ~20% del dataset, y los 86
+                faltantes en el conjunto de pruebas también constituyen
+                aproximadamente un ~20% del conjunto de pruebas.
+              </p>
+
+              <p>
+                Eliminar los ejemplos que tienen un valor faltante en 'Cabin' o
+                'Age' no es una opción, ya que estaríamos desperdiciando mucha
+                información. Por otro lado, deshacernos de los 2 ejemplos que
+                tienen un valor faltante en 'Embarked' en el conjunto de
+                entrenamiento es algo que podemos hacer, ya que solo estamos
+                eliminando el 0,2% del conjunto de entrenamiento. El mismo
+                razonamiento se aplica a 'Fare' en el conjunto de pruebas.
+              </p>
+
+              <p>
+                Nos desharemos de 'Cabin' debido a sus valores faltantes y de
+                'Ticket' porque es demasiado ruidoso.
+              </p>
+
+              <p>
+                Otra opción aquí para lidiar con los valores faltantes es
+                realizar una imputación en los atributos. Eso es lo que haremos
+                para 'Age' y 'Embarked'. Primero echaremos un vistazo a la moda
+                de 'Embarked', ya que reemplazaremos los valores faltantes con
+                ella.
+              </p>
+
+              <pre><code># Inspect count of each value of 'Embarked'
+training.Embarked.value_counts()
+</code></pre>
+
+              <p>Esto genera la salida:</p>
+
+              <pre><code>S     644
+C     168
+Q     77
+Name: Embarked, dtype: int64
+                </code></pre>
+
+              <p>
+                De los 891 ejemplos del conjunto de entrenamiento, 644 tienen el
+                valor 'S' en 'Embarked', lo que significa que esta es la moda de
+                este atributo. Ahora que sabemos esto, eliminemos los atributos
+                'Cabin' y 'Ticket' y realicemos la imputación en 'Embarked'
+                reemplazando sus valores faltantes con la moda.
+              </p>
+
+              <pre><code># Drop Cabin and Ticket attributes
+training.drop(labels = ["Cabin", "Ticket"], axis = 1, inplace = True)
+testing.drop(labels = ["Cabin", "Ticket"], axis = 1, inplace = True)
+
+# Fill 'Embarked' with its mode
+training["Embarked"].fillna("S", inplace = True)
+
+# Inspect amount of missing values
+null_table(training, testing)
+</code></pre>
+
+              <p>Esto genera la siguiente salida:</p>
+
+              <pre><code>Training dataset missing values:
+PassengerId      0
+Survived         0
+Pclass           0
+Name             0
+Sex              0
+Age            177
+SibSp            0
+Parch            0
+Fare             0
+Embarked         0
+dtype: int64
+
+Testing dataset missing values:
+PassengerId     0
+Pclass          0
+Name            0
+Sex             0
+Age            86
+SibSp           0
+Parch           0
+Fare            1
+Embarked        0
+</code></pre>
+
+              <p>
+                Bien, ahora que los atributos 'Embarked', 'Cabin' y 'Ticket'
+                están bajo control, centrémonos en el atributo 'Age'. De hecho,
+                veamos su distribución.
+              </p>
+
+              <pre><code># Plot distribution of 'Age'
+copy = training.copy()
+copy.dropna(inplace = True)
+sns.distplot(copy["Age"])
+</code></pre>
+
+              <pre><code><div class="centered"><img src="/images/titanic_survivors/age-distribution.jpg" alt=""></div></code></pre>
+
+              <p>
+                Dado que la distribución parece ligeramente sesgada hacia la
+                derecha, podemos reemplazar sus valores faltantes con la
+                mediana. Nota que no estamos interesados en reemplazarlos con la
+                media porque esta última se ve afectada por los valores
+                atípicos.
+              </p>
+
+              <pre><code>training.Age.fillna(training.Age.median(), inplace = True)
+testing.Age.fillna(testing.Age.median(), inplace = True)
+testing.Fare.fillna(testing.Fare.median(), inplace = True)
+
+null_table(training, testing)
+</code></pre>
+
+              <p>
+                El bloque de código anterior genera las tablas de valores
+                faltantes. Échales un vistazo, ya no tenemos valores faltantes;
+                hemos resuelto este problema.
+              </p>
+
+              <pre><code>Training dataset missing values:
+PassengerId    0
+Survived       0
+Pclass         0
+Name           0
+Sex            0
+Age            0
+SibSp          0
+Parch          0
+Fare           0
+Embarked       0
+dtype: int64
+
+Testing dataset missing values:
+PassengerId    0
+Pclass         0
+Name           0
+Sex            0
+Age            0
+SibSp          0
+Parch          0
+Fare           0
+Embarked       0
+dtype: int64
+</code></pre>
+
+              <h3 class="major">Graficando y Visualizando Datos</h3>
+
+              <p>
+                Ahora que hemos depurado nuestro dataset, analicemos los
+                atributos más relevantes para recopilar información y
+                comprenderlos mejor.
+              </p>
+
+              <pre><code># Plot distribution of survival based on sex
+sns.barplot(x="Sex", y="Survived", data=training)
+plt.title("Distribution of Survival based on Sex")
+plt.show()
+
+total_survived_females = training[training.Sex == "female"]["Survived"].sum()
+total_survived_males = training[training.Sex == "male"]["Survived"].sum()
+total_survived = total_survived_females + total_survived_males
+
+print("Total people survived: " + str(total_survived))
+print("Proportion of Females who survived:")
+print(total_survived_females/total_survived)
+print("Proportion of Males who survived:")
+print(total_survived_males/total_survived)
+</code></pre>
+
+              <p>
+                Esto muestra la distribución de supervivencia basada en el
+                género (Sexo):
+              </p>
+
+              <pre><code><div class="centered"><img src="./images/titanic_survivors/survival-sex-distribution.jpg" alt=""></div>
+Total people survived: 342
+Proportion of Females who survived:
+0.6812865497076024
+Proportion of Males who survived:
+0.31871345029239767
+</code></pre>
+              <p>
+                Dado que hay una gran diferencia entre las dos proporciones, la
+                edad (Age) parece ser una característica útil para predecir la
+                supervivencia. Ahora echemos un vistazo a 'Pclass'.
+              </p>
+
+              <pre><code># Plot distribution of survival based on passenger class
+sns.barplot(x="Pclass", y="Survived", data=training)
+plt.ylabel("Survival Rate")
+plt.title("Distribution of Survival Based on Class")
+plt.show()
+
+total_survived_one = training[training.Pclass == 1]["Survived"].sum()
+total_survived_two = training[training.Pclass == 2]["Survived"].sum()
+total_survived_three = training[training.Pclass == 3]["Survived"].sum()
+total_survived_class = total_survived_one + total_survived_two + total_survived_three
+
+print("Total people survived: " + str(total_survived_class))
+print("Proportion of Class 1 Passengers who survived:")
+print(total_survived_one/total_survived_class)
+print("Proportion of Class 2 Passengers who survived:")
+print(total_survived_two/total_survived_class)
+print("Proportion of Class 3 Passengers who survived:")
+print(total_survived_three/total_survived_class)
+</code></pre>
+
+              <p>Esto genera la siguiente salida:</p>
+
+              <pre><code><div class="centered"><img src="./images/titanic_survivors/survival-class-distribution.jpg" alt=""></div>
+Total people survived: 342
+Proportion of Class 1 Passengers who survived:
+0.39766081871345027
+Proportion of Class 2 Passengers who survived:
+0.2543859649122807
+Proportion of Class 3 Passengers who survived:
+0.347953216374269</code></pre>
+
+              <p>
+                Ahora, introduciendo el género (Sexo) como matiz (hue) en el
+                gráfico:
+              </p>
+
+              <pre><code># Plot distribution of survival based on passenger class with Sex as hue
+sns.barplot(x="Pclass", y="Survived", hue="Sex", data=training)
+plt.ylabel("Survival Rate")
+plt.title("Survival Rates Based on Gender and Class")
+</code></pre>
+
+              <pre><code><div class="centered"><img src="./images/titanic_survivors/survival-sex-class.jpg" alt=""></div></code></pre>
+
+              <p>Y cambiando 'Pclass' y 'Sex' en el gráfico:</p>
+
+              <pre><code># Plot distribution of survival based on Sex with passenger class as hue
+sns.barplot(x="Sex", y="Survived", hue="Pclass", data=training)
+plt.ylabel("Survival Rate")
+plt.title("Survival Rates Based on Gender and Class")
+</code></pre>
+
+              <pre><code><div class="centered"><img src="./images/titanic_survivors/survival-class-sex.jpg" alt=""></div></code></pre>
+
+              <p>
+                Observando los gráficos de barras, notamos que 'Pclass' también
+                es útil para predecir quiénes sobrevivieron. Las personas en la
+                clase de pasajeros 1 tenían una probabilidad más alta de
+                sobrevivir que las personas en las otras dos clases. Ahora
+                echemos un vistazo a 'Age'.
+              </p>
+
+              <pre><code># Plot survived and not survived proportions based on age
+survived_ages = training[training.Survived == 1]["Age"]
+not_survived_ages = training[training.Survived == 0]["Age"]
+plt.subplot(1, 2, 1)
+sns.distplot(survived_ages, kde=False)
+plt.axis([0, 100, 0, 100])
+plt.title("Survived")
+plt.ylabel("Proportion")
+plt.subplot(1, 2, 2)
+sns.distplot(not_survived_ages, kde=False)
+plt.axis([0, 100, 0, 100])
+plt.title("Didn't Survive")
+plt.subplots_adjust(right=1.7)
+plt.show()
+</code></pre>
+
+              <pre><code><div class="centered"><img src="./images/titanic_survivors/survival-age.jpg" alt=""></div></code></pre>
+
+              <pre><code>sns.stripplot(x="Survived", y="Age", data=training, jitter=True)</code></pre>
+
+              <pre><code><div class="centered"><img src="./images/titanic_survivors/survival-age-scatter.jpg" alt=""></div></code></pre>
+
+              <p>
+                Parece que los pasajeros en el rango de edades más jóvenes
+                tenían una mayor probabilidad de sobrevivir en comparación con
+                los pasajeros en el rango de edades más avanzadas.
+              </p>
+
+              <h3 class="major">Ingeniería de Características</h3>
+
+              <p>
+                Ahora, realicemos ingeniería de características para enriquecer
+                los conjuntos de datos originales. Dado que los valores de 'Sex'
+                y 'Embarked' son categóricos, tendremos que transformarlos en
+                valores numéricos antes de alimentarlos a nuestro modelo.
+                Echemos un vistazo primero a sus posibles valores.
+              </p>
+
+              <pre><code>print("Possible values for Sex: {}".format(set(training["Sex"])))
+print("Possible values for Embarked: {}".format(set(training["Embarked"])))
+</code></pre>
+
+              <pre><code>Possible values for Sex: {'male', 'female'}
+Possible values for Embarked: {'Q', 'S', 'C'}
+</code></pre>
+
+              <p>Codifiquemos estos atributos:</p>
+
+              <pre><code>le_sex = LabelEncoder()
+le_sex.fit(training["Sex"])
+
+encoded_sex_training = le_sex.transform(training["Sex"])
+training["Sex"] = encoded_sex_training
+encoded_sex_testing = le_sex.transform(testing["Sex"])
+testing["Sex"] = encoded_sex_testing
+
+le_embarked = LabelEncoder()
+le_embarked.fit(training["Embarked"])
+
+encoded_embarked_training = le_embarked.transform(training["Embarked"])
+training["Embarked"] = encoded_embarked_training
+encoded_embarked_testing = le_embarked.transform(testing["Embarked"])
+testing["Embarked"] = encoded_embarked_testing
+</code></pre>
+
+              <p>
+                Ahora que están codificados, podemos echar un vistazo a sus
+                valores. Para esto, tomamos una muestra de cada dataset.
+              </p>
+
+              <pre><code># Sample training dataset
+training.sample(5)
+</code></pre>
+
+              <table border="1">
+                <thead>
+                  <tr style="text-align: right">
+                    <th></th>
+                    <th>PassengerId</th>
+                    <th>Survived</th>
+                    <th>Pclass</th>
+                    <th>Name</th>
+                    <th>Sex</th>
+                    <th>Age</th>
+                    <th>SibSp</th>
+                    <th>Parch</th>
+                    <th>Fare</th>
+                    <th>Embarked</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>541</th>
+                    <td>542</td>
+                    <td>0</td>
+                    <td>3</td>
+                    <td>Andersson, Miss. Ingeborg Constanzia</td>
+                    <td>0</td>
+                    <td>9.0</td>
+                    <td>4</td>
+                    <td>2</td>
+                    <td>31.2750</td>
+                    <td>2</td>
+                  </tr>
+                  <tr>
+                    <th>546</th>
+                    <td>547</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>Beane, Mrs. Edward (Ethel Clarke)</td>
+                    <td>0</td>
+                    <td>19.0</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>26.0000</td>
+                    <td>2</td>
+                  </tr>
+                  <tr>
+                    <th>593</th>
+                    <td>594</td>
+                    <td>0</td>
+                    <td>3</td>
+                    <td>Bourke, Miss. Mary</td>
+                    <td>0</td>
+                    <td>28.0</td>
+                    <td>0</td>
+                    <td>2</td>
+                    <td>7.7500</td>
+                    <td>1</td>
+                  </tr>
+                  <tr>
+                    <th>134</th>
+                    <td>135</td>
+                    <td>0</td>
+                    <td>2</td>
+                    <td>Sobey, Mr. Samuel James Hayden</td>
+                    <td>1</td>
+                    <td>25.0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>13.0000</td>
+                    <td>2</td>
+                  </tr>
+                  <tr>
+                    <th>652</th>
+                    <td>653</td>
+                    <td>0</td>
+                    <td>3</td>
+                    <td>Kalvik, Mr. Johannes Halvorsen</td>
+                    <td>1</td>
+                    <td>21.0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>8.4333</td>
+                    <td>2</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <pre><code># Sample testing dataset
+testing.sample(5)
+</code></pre>
+
+              <table border="1">
+                <thead>
+                  <tr style="text-align: right">
+                    <th></th>
+                    <th>PassengerId</th>
+                    <th>Pclass</th>
+                    <th>Name</th>
+                    <th>Sex</th>
+                    <th>Age</th>
+                    <th>SibSp</th>
+                    <th>Parch</th>
+                    <th>Fare</th>
+                    <th>Embarked</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>204</th>
+                    <td>1096</td>
+                    <td>2</td>
+                    <td>Andrew, Mr. Frank Thomas</td>
+                    <td>1</td>
+                    <td>25.0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>10.5000</td>
+                    <td>2</td>
+                  </tr>
+                  <tr>
+                    <th>264</th>
+                    <td>1156</td>
+                    <td>2</td>
+                    <td>Portaluppi, Mr. Emilio Ilario Giuseppe</td>
+                    <td>1</td>
+                    <td>30.0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>12.7375</td>
+                    <td>0</td>
+                  </tr>
+                  <tr>
+                    <th>31</th>
+                    <td>923</td>
+                    <td>2</td>
+                    <td>Jefferys, Mr. Clifford Thomas</td>
+                    <td>1</td>
+                    <td>24.0</td>
+                    <td>2</td>
+                    <td>0</td>
+                    <td>31.5000</td>
+                    <td>2</td>
+                  </tr>
+                  <tr>
+                    <th>203</th>
+                    <td>1095</td>
+                    <td>2</td>
+                    <td>Quick, Miss. Winifred Vera</td>
+                    <td>0</td>
+                    <td>8.0</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>26.0000</td>
+                    <td>2</td>
+                  </tr>
+                  <tr>
+                    <th>216</th>
+                    <td>1108</td>
+                    <td>3</td>
+                    <td>Mahon, Miss. Bridget Delia</td>
+                    <td>0</td>
+                    <td>27.0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>7.8792</td>
+                    <td>1</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <p>
+                Ahora procedemos a crear características sintéticas que creemos
+                pueden ayudar a nuestro modelo. Aquí creamos 'FamSize' y
+                'IsAlone'.
+              </p>
+
+              <pre><code># Create Family Size attribute
+training["FamSize"] = training["SibSp"] + training["Parch"] + 1
+testing["FamSize"] = testing["SibSp"] + testing["Parch"] + 1
+
+# Create Is Alone attribute
+training["IsAlone"] = training.FamSize.apply(lambda x: 1 if x == 1 else 0)
+testing["IsAlone"] = testing.FamSize.apply(lambda x: 1 if x == 1 else 0)
+</code></pre>
+
+              <p>
+                Podemos extraer el título de la persona de su nombre, es decir,
+                "Mr. John Doe" > "Mr". Esto podría estar relacionado con la
+                supervivencia del pasajero.
+              </p>
+
+              <pre><code># Create Title attribute
+for name in training["Name"]:
+    training["Title"] = training["Name"].str.extract("([A-Za-z]+)\.",expand=True)
+
+for name in testing["Name"]:
+    testing["Title"] = testing["Name"].str.extract("([A-Za-z]+)\.",expand=True)
+</code></pre>
+
+              <p>Veamos la frecuencia de cada título.</p>
+
+              <pre><code># Save title set
+titles = set(training["Title"])
+print(titles)
+</code></pre>
+
+              <pre><code># Create list of frequency of titles
+title_list = list(training["Title"])
+frequency_titles = []
+
+for i in titles:
+    frequency_titles.append(title_list.count(i))
+
+titles = list(titles)
+
+# Create dataframe with titles and their frequency
+title_dataframe = pd.DataFrame({
+    "Titles" : titles,
+    "Frequency" : frequency_titles
+})
+
+# Show title dataframe
+print(title_dataframe)
+</code></pre>
+
+              <p>Las frecuencias son las siguientes:</p>
+
+              <pre><code>      Titles  Frequency
+0         Ms          1
+1         Mr        517
+2     Master         40
+3         Dr          7
+4        Don          1
+5   Countess          1
+6       Capt          1
+7       Miss        182
+8        Mrs        125
+9       Mlle          2
+10  Jonkheer          1
+11      Lady          1
+12       Rev          6
+13       Mme          1
+14       Col          2
+15     Major          2
+16       Sir          1
+</code></pre>
+
+              <p>
+                Ten en cuenta que el título es un valor categórico, por lo que
+                necesitaremos codificarlo, como hicimos con otros atributos
+                anteriormente.
+              </p>
+
+              <pre><code># Encode titles
+title_replacements = {"Mlle": "Other", "Major": "Other", "Col": "Other",
+            "Sir": "Other", "Don": "Other", "Mme": "Other",
+            "Jonkheer": "Other", "Lady": "Other", "Capt": "Other",
+            "Countess": "Other", "Ms": "Other", "Dona": "Other"}
+
+training.replace({"Title": title_replacements}, inplace=True)
+testing.replace({"Title": title_replacements}, inplace=True)
+
+le_title = LabelEncoder()
+le_title.fit(training["Title"])
+
+encoded_title_training = le_title.transform(training["Title"])
+training["Title"] = encoded_title_training
+encoded_title_testing = le_title.transform(testing["Title"])
+testing["Title"] = encoded_title_testing
+</code></pre>
+
+              <p>
+                Ahora que hemos utilizado el atributo 'Name' para obtener los
+                títulos de cada pasajero, podemos eliminar el atributo 'Name',
+                ya que no proporcionará información útil al modelo.
+              </p>
+
+              <pre><code># Drop name attribute
+training.drop("Name", axis = 1, inplace = True)
+testing.drop("Name", axis = 1, inplace = True)
+</code></pre>
+
+              <p>
+                Por último, tomemos una muestra de nuestros datos para ver los
+                cambios.
+              </p>
+
+              <pre><code># Sample training
+training.sample(5)
+</code></pre>
+
+              <table border="1">
+                <thead>
+                  <tr style="text-align: right">
+                    <th></th>
+                    <th>PassengerId</th>
+                    <th>Survived</th>
+                    <th>Pclass</th>
+                    <th>Sex</th>
+                    <th>Age</th>
+                    <th>SibSp</th>
+                    <th>Parch</th>
+                    <th>Fare</th>
+                    <th>Embarked</th>
+                    <th>FamSize</th>
+                    <th>IsAlone</th>
+                    <th>Title</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>805</th>
+                    <td>806</td>
+                    <td>0</td>
+                    <td>3</td>
+                    <td>1</td>
+                    <td>31.0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>7.7750</td>
+                    <td>2</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>3</td>
+                  </tr>
+                  <tr>
+                    <th>753</th>
+                    <td>754</td>
+                    <td>0</td>
+                    <td>3</td>
+                    <td>1</td>
+                    <td>23.0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>7.8958</td>
+                    <td>2</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>3</td>
+                  </tr>
+                  <tr>
+                    <th>814</th>
+                    <td>815</td>
+                    <td>0</td>
+                    <td>3</td>
+                    <td>1</td>
+                    <td>30.5</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>8.0500</td>
+                    <td>2</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>3</td>
+                  </tr>
+                  <tr>
+                    <th>80</th>
+                    <td>81</td>
+                    <td>0</td>
+                    <td>3</td>
+                    <td>1</td>
+                    <td>22.0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>9.0000</td>
+                    <td>2</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>3</td>
+                  </tr>
+                  <tr>
+                    <th>882</th>
+                    <td>883</td>
+                    <td>0</td>
+                    <td>3</td>
+                    <td>0</td>
+                    <td>22.0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>10.5167</td>
+                    <td>2</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>2</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <pre><code># Sample testing
+testing.sample(5)
+</code></pre>
+
+              <table border="1">
+                <thead>
+                  <tr style="text-align: right">
+                    <th></th>
+                    <th>PassengerId</th>
+                    <th>Pclass</th>
+                    <th>Sex</th>
+                    <th>Age</th>
+                    <th>SibSp</th>
+                    <th>Parch</th>
+                    <th>Fare</th>
+                    <th>Embarked</th>
+                    <th>FamSize</th>
+                    <th>IsAlone</th>
+                    <th>Title</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>18</th>
+                    <td>910</td>
+                    <td>3</td>
+                    <td>0</td>
+                    <td>27.0</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>7.925</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>0</td>
+                    <td>2</td>
+                  </tr>
+                  <tr>
+                    <th>58</th>
+                    <td>950</td>
+                    <td>3</td>
+                    <td>1</td>
+                    <td>27.0</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>16.100</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>0</td>
+                    <td>3</td>
+                  </tr>
+                  <tr>
+                    <th>335</th>
+                    <td>1227</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>30.0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>26.000</td>
+                    <td>2</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>3</td>
+                  </tr>
+                  <tr>
+                    <th>102</th>
+                    <td>994</td>
+                    <td>3</td>
+                    <td>1</td>
+                    <td>27.0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>7.750</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>3</td>
+                  </tr>
+                  <tr>
+                    <th>91</th>
+                    <td>983</td>
+                    <td>3</td>
+                    <td>1</td>
+                    <td>27.0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>7.775</td>
+                    <td>2</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>3</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h3 class="major">Reescalado de Características</h3>
+
+              <p>
+                Necesitaremos reescalar los atributos 'Age' y 'Fare' antes de
+                que nuestro modelo los utilice. Para escalarlos, utilizamos un
+                StandardScaler.
+              </p>
+
+              <pre><code>scaler = StandardScaler()
+
+ages_train = np.array(training["Age"]).reshape(-1, 1)
+fares_train = np.array(training["Fare"]).reshape(-1, 1)
+ages_test = np.array(testing["Age"]).reshape(-1, 1)
+fares_test = np.array(testing["Fare"]).reshape(-1, 1)
+
+training["Age"] = scaler.fit_transform(ages_train)
+training["Fare"] = scaler.fit_transform(fares_train)
+testing["Age"] = scaler.fit_transform(ages_test)
+testing["Fare"] = scaler.fit_transform(fares_test)
+</code></pre>
+
+              <p>
+                Veamos los efectos del reescalado en los conjuntos de datos.
+              </p>
+
+              <pre><code># Inspect training dataset
+training.head()
+</code></pre>
+
+              <table border="1">
+                <thead>
+                  <tr style="text-align: right">
+                    <th></th>
+                    <th>PassengerId</th>
+                    <th>Survived</th>
+                    <th>Pclass</th>
+                    <th>Sex</th>
+                    <th>Age</th>
+                    <th>SibSp</th>
+                    <th>Parch</th>
+                    <th>Fare</th>
+                    <th>Embarked</th>
+                    <th>FamSize</th>
+                    <th>IsAlone</th>
+                    <th>Title</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>0</th>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>3</td>
+                    <td>1</td>
+                    <td>-0.565736</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>-0.502445</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>0</td>
+                    <td>3</td>
+                  </tr>
+                  <tr>
+                    <th>1</th>
+                    <td>2</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>0.663861</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>0.786845</td>
+                    <td>0</td>
+                    <td>2</td>
+                    <td>0</td>
+                    <td>4</td>
+                  </tr>
+                  <tr>
+                    <th>2</th>
+                    <td>3</td>
+                    <td>1</td>
+                    <td>3</td>
+                    <td>0</td>
+                    <td>-0.258337</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>-0.488854</td>
+                    <td>2</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>2</td>
+                  </tr>
+                  <tr>
+                    <th>3</th>
+                    <td>4</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>0.433312</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>0.420730</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>0</td>
+                    <td>4</td>
+                  </tr>
+                  <tr>
+                    <th>4</th>
+                    <td>5</td>
+                    <td>0</td>
+                    <td>3</td>
+                    <td>1</td>
+                    <td>0.433312</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>-0.486337</td>
+                    <td>2</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>3</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <pre><code># Inspect testing dataset
+testing.head()
+</code></pre>
+
+              <table border="1">
+                <thead>
+                  <tr style="text-align: right">
+                    <th></th>
+                    <th>PassengerId</th>
+                    <th>Pclass</th>
+                    <th>Sex</th>
+                    <th>Age</th>
+                    <th>SibSp</th>
+                    <th>Parch</th>
+                    <th>Fare</th>
+                    <th>Embarked</th>
+                    <th>FamSize</th>
+                    <th>IsAlone</th>
+                    <th>Title</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>0</th>
+                    <td>892</td>
+                    <td>3</td>
+                    <td>1</td>
+                    <td>0.386231</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>-0.497413</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>3</td>
+                  </tr>
+                  <tr>
+                    <th>1</th>
+                    <td>893</td>
+                    <td>3</td>
+                    <td>0</td>
+                    <td>1.371370</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>-0.512278</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>0</td>
+                    <td>4</td>
+                  </tr>
+                  <tr>
+                    <th>2</th>
+                    <td>894</td>
+                    <td>2</td>
+                    <td>1</td>
+                    <td>2.553537</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>-0.464100</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>3</td>
+                  </tr>
+                  <tr>
+                    <th>3</th>
+                    <td>895</td>
+                    <td>3</td>
+                    <td>1</td>
+                    <td>-0.204852</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>-0.482475</td>
+                    <td>2</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>3</td>
+                  </tr>
+                  <tr>
+                    <th>4</th>
+                    <td>896</td>
+                    <td>3</td>
+                    <td>0</td>
+                    <td>-0.598908</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>-0.417492</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>0</td>
+                    <td>4</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h3 class="major">
+                Ajuste del Modelo, Optimización y Predicción
+              </h3>
+
+              <p>
+                Hemos terminado con el preprocesamiento de datos, así que ahora
+                probamos diferentes modelos y comparamos su rendimiento.
+                Definamos el conjunto de características de entrenamiento, así
+                como la variable objetivo.
+              </p>
+
+              <pre><code>X_train = training.drop(labels=["PassengerId", "Survived"], axis=1) # define training features set
+y_train = training["Survived"] # define training label set
+</code></pre>
+
+              <p>
+                Crearemos un conjunto de validación para probar la precisión
+                general de nuestro modelo. Utilizaremos una proporción de 0.8 /
+                0.2.
+              </p>
+
+              <pre><code>X_training, X_valid, y_training, y_valid = train_test_split(X_train, y_train,
+                                                            test_size=0.2,
+                                                            random_state=0)
+</code></pre>
+
+              <p>
+                Ahora que nuestro conjunto de validación está listo, procedemos
+                a entrenar cada modelo. Por ahora, proporcionaremos los bloques
+                de código necesarios para el entrenamiento, veremos los
+                resultados de precisión de cada modelo en la siguiente sección.
+              </p>
+
+              <h4>Modelo SVC</h4>
+
+              <pre><code># SVC Model
+svc_clf = SVC()
+
+parameters_svc = {"kernel": ["rbf", "linear"], "probability": [True, False], "verbose": [True, False]}
+
+grid_svc = GridSearchCV(svc_clf, parameters_svc, scoring=make_scorer(accuracy_score))
+grid_svc.fit(X_training, y_training)
+
+svc_clf = grid_svc.best_estimator_
+
+svc_clf.fit(X_training, y_training)
+pred_svc = svc_clf.predict(X_valid)
+acc_svc = accuracy_score(y_valid, pred_svc)
+
+print("\nThe Score for SVC is: " + str(acc_svc))
+</code></pre>
+
+              <h4>Nodelo SVC Lineal</h4>
+
+              <pre><code># LinearSVC Model
+linsvc_clf = LinearSVC()
+
+parameters_linsvc = {"multi_class": ["ovr", "crammer_singer"], "fit_intercept": [True, False], "max_iter": [100, 500, 1000, 1500]}
+
+grid_linsvc = GridSearchCV(linsvc_clf, parameters_linsvc, scoring=make_scorer(accuracy_score))
+grid_linsvc.fit(X_training, y_training)
+
+linsvc_clf = grid_linsvc.best_estimator_
+
+linsvc_clf.fit(X_training, y_training)
+pred_linsvc = linsvc_clf.predict(X_valid)
+acc_linsvc = accuracy_score(y_valid, pred_linsvc)
+
+print("The Score for LinearSVC is: " + str(acc_linsvc))
+</code></pre>
+
+              <h4>Bosque Aleatorio</h4>
+
+              <pre><code># RandomForest Model
+rf_clf = RandomForestClassifier()
+
+parameters_rf = {"n_estimators": [4, 5, 6, 7, 8, 9, 10, 15], "criterion": ["gini", "entropy"], "max_features": ["auto", "sqrt", "log2"],
+                 "max_depth": [2, 3, 5, 10], "min_samples_split": [2, 3, 5, 10]}
+
+grid_rf = GridSearchCV(rf_clf, parameters_rf, scoring=make_scorer(accuracy_score))
+grid_rf.fit(X_training, y_training)
+
+rf_clf = grid_rf.best_estimator_
+
+rf_clf.fit(X_training, y_training)
+pred_rf = rf_clf.predict(X_valid)
+acc_rf = accuracy_score(y_valid, pred_rf)
+
+print("The Score for Random Forest is: " + str(acc_rf))
+</code></pre>
+
+              <h4>Regresión Logística</h4>
+
+              <pre><code># LogisiticRegression Model
+logreg_clf = LogisticRegression()
+
+parameters_logreg = {"penalty": ["l2"], "fit_intercept": [True, False], "solver": ["newton-cg", "lbfgs", "liblinear", "sag", "saga"],
+                     "max_iter": [50, 100, 200], "warm_start": [True, False]}
+
+grid_logreg = GridSearchCV(logreg_clf, parameters_logreg, scoring=make_scorer(accuracy_score))
+grid_logreg.fit(X_training, y_training)
+
+logreg_clf = grid_logreg.best_estimator_
+
+logreg_clf.fit(X_training, y_training)
+pred_logreg = logreg_clf.predict(X_valid)
+acc_logreg = accuracy_score(y_valid, pred_logreg)
+
+print("The Score for Logistic Regression is: " + str(acc_logreg))
+</code></pre>
+
+              <h4>K Vecinos Más Cercanos</h4>
+
+              <pre><code># KNeighbors Model
+knn_clf = KNeighborsClassifier()
+
+parameters_knn = {"n_neighbors": [3, 5, 10, 15], "weights": ["uniform", "distance"], "algorithm": ["auto", "ball_tree", "kd_tree"],
+                  "leaf_size": [20, 30, 50]}
+
+grid_knn = GridSearchCV(knn_clf, parameters_knn, scoring=make_scorer(accuracy_score))
+grid_knn.fit(X_training, y_training)
+
+knn_clf = grid_knn.best_estimator_
+
+knn_clf.fit(X_training, y_training)
+pred_knn = knn_clf.predict(X_valid)
+acc_knn = accuracy_score(y_valid, pred_knn)
+
+print("The Score for KNeighbors is: " + str(acc_knn))
+</code></pre>
+
+              <h4>Naive Bayes Gaussiano</h4>
+
+              <pre><code># GaussianNB Model
+gnb_clf = GaussianNB()
+
+parameters_gnb = {}
+
+grid_gnb = GridSearchCV(gnb_clf, parameters_gnb, scoring=make_scorer(accuracy_score))
+grid_gnb.fit(X_training, y_training)
+
+gnb_clf = grid_gnb.best_estimator_
+
+gnb_clf.fit(X_training, y_training)
+pred_gnb = gnb_clf.predict(X_valid)
+acc_gnb = accuracy_score(y_valid, pred_gnb)
+
+print("The Score for Gaussian NB is: " + str(acc_gnb))
+</code></pre>
+
+              <h4>Árbol de Decisión</h4>
+
+              <pre><code># DecisionTree Model
+dt_clf = DecisionTreeClassifier()
+
+parameters_dt = {"criterion": ["gini", "entropy"], "splitter": ["best", "random"], "max_features": ["auto", "sqrt", "log2"]}
+
+grid_dt = GridSearchCV(dt_clf, parameters_dt, scoring=make_scorer(accuracy_score))
+grid_dt.fit(X_training, y_training)
+
+dt_clf = grid_dt.best_estimator_
+
+dt_clf.fit(X_training, y_training)
+pred_dt = dt_clf.predict(X_valid)
+acc_dt = accuracy_score(y_valid, pred_dt)
+
+print("The Score for Decision Tree is: " + str(acc_dt))
+</code></pre>
+
+              <h4>Extreme Gradient Boosting</h4>
+
+              <pre><code># XGBoost Model
+from xgboost import XGBClassifier
+
+xg_clf = XGBClassifier()
+
+parameters_xg = {"objective" : ["reg:linear"], "n_estimators" : [5, 10, 15, 20]}
+
+grid_xg = GridSearchCV(xg_clf, parameters_xg, scoring=make_scorer(accuracy_score))
+grid_xg.fit(X_training, y_training)
+
+xg_clf = grid_xg.best_estimator_
+
+xg_clf.fit(X_training, y_training)
+pred_xg = xg_clf.predict(X_valid)
+acc_xg = accuracy_score(y_valid, pred_xg)
+
+print("The Score for XGBoost is: " + str(acc_xg))
+</code></pre>
+
+              <h3 class="major">
+                Evaluando la Performance de los Modelos Entrenados
+              </h3>
+
+              <p>
+                Ahora que tenemos el rendimiento de nuestros modelos, podemos
+                compararlos. El siguiente bloque de código imprime una tabla con
+                los modelos y sus rendimientos, en orden descendente.
+              </p>
+
+              <pre><code>model_performance = pd.DataFrame({
+  "Model": ["SVC", "Linear SVC", "Random Forest",
+            "Logistic Regression", "K Nearest Neighbors", "Gaussian Naive Bayes",
+            "Decision Tree", "XGBClassifier"],
+  "Accuracy": [acc_svc, acc_linsvc, acc_rf,
+            acc_logreg, acc_knn, acc_gnb, acc_dt, acc_xg]
+})
+
+model_performance.sort_values(by="Accuracy", ascending=False)
+</code></pre>
+
+              <p>Los resultados obtenidos son los siguientes:</p>
+
+              <table border="1">
+                <thead>
+                  <tr style="text-align: right">
+                    <th></th>
+                    <th>Model</th>
+                    <th>Accuracy</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>7</th>
+                    <td>XGBClassifier</td>
+                    <td>0.843575</td>
+                  </tr>
+                  <tr>
+                    <th>2</th>
+                    <td>Random Forest</td>
+                    <td>0.837989</td>
+                  </tr>
+                  <tr>
+                    <th>0</th>
+                    <td>SVC</td>
+                    <td>0.821229</td>
+                  </tr>
+                  <tr>
+                    <th>3</th>
+                    <td>Logistic Regression</td>
+                    <td>0.810056</td>
+                  </tr>
+                  <tr>
+                    <th>1</th>
+                    <td>Linear SVC</td>
+                    <td>0.782123</td>
+                  </tr>
+                  <tr>
+                    <th>6</th>
+                    <td>Decision Tree</td>
+                    <td>0.782123</td>
+                  </tr>
+                  <tr>
+                    <th>5</th>
+                    <td>Gaussian Naive Bayes</td>
+                    <td>0.776536</td>
+                  </tr>
+                  <tr>
+                    <th>4</th>
+                    <td>K Nearest Neighbors</td>
+                    <td>0.765363</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h2>Conclusión</h2>
+
+              <p>
+                Hemos recorrido el proceso de construcción de un modelo de
+                aprendizaje automático e inspeccionado sus resultados utilizando
+                Python y scikit-learn. Comenzamos importando las bibliotecas
+                necesarias, luego cargamos los conjuntos de datos de
+                entrenamiento y prueba y examinamos su estructura. Para sorpresa
+                de nadie, los conjuntos de datos tenían valores faltantes en
+                algunos atributos, por lo que aplicamos técnicas como la
+                imputación y la selección de atributos para lidiar con los
+                valores faltantes. Después de esto, representamos gráficamente
+                algunos datos para visualizarlos y analizarlos en busca de
+                información y comprensión. Luego realizamos la ingeniería de
+                características para crear dos nuevos atributos que creemos
+                podrían ayudar a nuestro modelo: 'FamSize' y 'IsAlone'. Nuestras
+                características numéricas ('Age' y 'Fare') necesitaron un
+                reescalado antes de ser alimentadas a los algoritmos, por lo que
+                después de hacer esto, pasamos por el proceso de entrenar
+                diferentes modelos y como resultado, terminamos con una tabla
+                que muestra cada modelo entrenado y su precisión. A partir de
+                los resultados que obtuvimos, podemos ver que XGBClassifier tuvo
+                una precisión de aproximadamente el 84%, siendo el modelo con la
+                mayor precisión, seguido de Bosque Aleatorio con casi un 84% de
+                precisión también.
+              </p>
+
+              <p>
+                Capaz te has dado cuenta de que no hemos utilizado el conjunto
+                de datos de prueba para evaluar los modelos. El conjunto de
+                datos de prueba se puede utilizar para simular un entorno de
+                producción y probar los modelos con él, obteniendo otra medida
+                de precisión en ejemplos nuevos y no vistos anteriormente. Esta
+                es una buena práctica para evaluar cómo se desempeñarán los
+                modelos en situaciones del mundo real.
+              </p>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <section id="footer">
+        <div class="inner">
+          <ul class="copyright">
+            <li>&copy; Nicolás Pavón Inc. All rights reserved.</li>
+            <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrollex.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>
