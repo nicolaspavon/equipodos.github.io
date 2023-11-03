@@ -55,7 +55,7 @@
       <section id="wrapper">
         <header id="kidney-header">
           <div class="inner">
-            <h2>PREDICTING CHRONIC KIDNEY DISEASE</h2>
+            <h2>Prediciendo la enfermedad crónica de rinión</h2>
           </div>
         </header>
 
@@ -63,32 +63,35 @@
         <div class="wrapper">
           <div class="inner">
             <section>
-              <h3 class="major">The issue:</h3>
+              <h3 class="major">El problema:</h3>
               <p>
-                Across the globe, many people are dealing with kidney diseases.
-                These can show up suddenly due to various risk factors like what
-                they eat, their surroundings, and how they live. Checking for
-                these diseases can be invasive, expensive, and slow. It might
-                even be risky. This is why, especially in places with limited
-                resources, lots of patients don't get diagnosed and treated
-                until their kidney disease is already advanced. So, finding ways
-                to spot these diseases early is really important, especially in
-                developing countries where late diagnosis is common.
+                Muchas personas lidian con enfermedades renales a nivel global.
+                Estas pueden manifestarse de repente debido a diversos factores
+                de riesgo, como lo que comen, su entorno y su forma de vida. La
+                detección de estas enfermedades puede ser invasiva, costosa y
+                lenta. Incluso puede ser arriesgada. Por esta razón,
+                especialmente en lugares con recursos limitados, muchos
+                pacientes no son diagnosticados ni tratados hasta que su
+                enfermedad renal ya está avanzada. Por lo tanto, encontrar
+                formas de detectar estas enfermedades temprano es realmente
+                importante, especialmente en países en desarrollo donde el
+                diagnóstico tardío es común.
               </p>
 
-              <h3 class="major">The data:</h3>
+              <h3 class="major">Los datos:</h3>
               <p>
-                There are many datasets containing information of patients with
-                this desease that can be worked on to achieve our objective,
-                predict chronic kidney disease. In this case we are going to use
-                the dataset provided by the UCI repository. Looking at the
-                description of the dataset and the data itself we can define the
-                types and roles of the attributes:
+                Existen muchos conjuntos de datos que contienen información de
+                pacientes con esta enfermedad que se pueden utilizar para lograr
+                nuestro objetivo de predecir la enfermedad renal crónica. En
+                este caso, vamos a utilizar el conjunto de datos proporcionado
+                por el repositorio de UCI. Al analizar la descripción del
+                conjunto de datos y los datos en sí, podemos definir los tipos y
+                roles de los atributos:
               </p>
             </section>
 
             <section>
-              <h3 class="major">Dataset info:</h3>
+              <h3 class="major">Informacion del dataset:</h3>
               <div class="table-wrapper">
                 <table>
                   <thead>
@@ -255,11 +258,11 @@
               </div>
             </section>
             <section>
-              <h3 class="major">Importing the data</h3>
+              <h3 class="major">Importando la información</h3>
               <p>
-                When importing the data, we noticed that it's necessary to
-                modify the types of several attributes because RapidMiner didn't
-                do a good job automatically.
+                Al importar los datos, notamos que es necesario modificar los
+                tipos de varios atributos ya que RapidMiner no hizo un buen
+                trabajo de forma automática.
               </p>
               <div class="col-12">
                 <span class="image fit"
@@ -267,22 +270,22 @@
                 /></span>
               </div>
               <p>
-                We observe that most of the attributes are recognized as
-                'polynomial,' even though only a few of them should be. We edit
-                all the attributes, assigning the types defined in the table
-                above. Remove rows that might cause issues (for example, if a
-                row contains 'no' in the 'class' column. It could be interpreted
-                as 'notckd,' but since it's a single value and we are not
-                certain, removing it won't cause problems). Finally, we renamed
-                the attributes to make their names more descriptive and easier
-                to work with.
+                Observamos que la mayoría de los atributos se reconocen como
+                'polinómicos', aunque solo unos pocos deberían serlo. Editamos
+                todos los atributos, asignando los tipos definidos en la tabla
+                anterior. Eliminamos filas que puedan causar problemas (por
+                ejemplo, una fila contiene 'no' en la columna 'clase', podría
+                interpretarse como 'nockd', pero como es un solo valor y no
+                estamos seguros, eliminarlo no causará problemas). Finalmente,
+                renombramos los atributos para hacer que sus nombres sean más
+                descriptivos y fáciles de trabajar.
               </p>
             </section>
             <section>
               <h3 class="major">Statistics</h3>
               <p>
-                Once the data is loaded into RM, we can study the following
-                statistics:
+                Una vez que la información fue cargada en RM, podemos estudiarla
+                analizando las siguientes estadísticas:
               </p>
               <div class="col-12">
                 <span class="image fit"
@@ -310,36 +313,37 @@
                 /></span>
               </div>
               <p>
-                From the statistics, we highlight the following observations:
+                A partir de las estadisticas realizamos las siguientes
+                observaciones:
               </p>
               <ul>
                 <li>
-                  It's a dataset with many missing values for various
-                  attributes.
+                  Es un conjunto de datos con muchos valores faltantes en varios
+                  atributos.
                 </li>
-                <li>The 'class' attribute is fairly balanced.</li>
+                <li>El atributo 'clase' está bastante equilibrado.</li>
                 <li>
-                  The 'potassium' column contains 2 outliers: we assume that a
-                  decimal point was omitted in the input, as the values 47 and
-                  39 would make more sense if they were 4.7 and 3.9.
+                  La columna 'potasio' contiene 2 valores atípicos: asumimos que
+                  se omitió un punto decimal en la entrada, ya que los valores
+                  47 y 39 tendrían más sentido si fueran 4.7 y 3.9.
                   <ul>
                     <li>
-                      We edit these datapoints in the dataset and rerun the
-                      statistics.
+                      Editamos estos datos en el conjunto de datos y volvemos a
+                      ejecutar las estadísticas.
                     </li>
                     <div class="box alt">
                       <div class="row gtr-uniform">
                         <div class="col-4">
                           <span class="image fit"
                             ><img src="images/rm/prepot.png" alt="" />
-                            <p><i>Before</i></p></span
+                            <p><i>Antes</i></p></span
                           >
                         </div>
                         <li class="icon solid fa-arrow-right"></li>
                         <div class="col-4">
                           <span class="image fit"
                             ><img src="images/rm/pot.png" alt="" />
-                            <p><i>After</i></p></span
+                            <p><i>Después</i></p></span
                           >
                         </div>
                       </div>
@@ -347,27 +351,28 @@
                   </ul>
                 </li>
                 <li>
-                  The 'sodium' column contains another outlier of value 4,5
-                  (values range between 100 - 163)
+                  La columna 'sodio' contiene otro valor atípico con un valor de
+                  4.5 (los valores oscilan entre 100 y 163).
                   <ul>
                     <li>
-                      Since there are many missing values (87) for this column,
-                      we just delete this value, and running the statistics
-                      again we can see the next improvements:
+                      Dado que hay muchos valores faltantes (87) para esta
+                      columna, simplemente eliminamos este valor y al volver a
+                      ejecutar las estadísticas, podemos ver las siguientes
+                      mejoras:
                     </li>
                     <div class="box alt">
                       <div class="row gtr-uniform">
                         <div class="col-4">
                           <span class="image fit"
                             ><img src="images/rm/presalt.png" alt="" />
-                            <p><i>Before</i></p></span
+                            <p><i>Antes</i></p></span
                           >
                         </div>
                         <li class="icon solid fa-arrow-right"></li>
                         <div class="col-4">
                           <span class="image fit"
                             ><img src="images/rm/salt.png" alt="" />
-                            <p><i>After</i></p></span
+                            <p><i>Después</i></p></span
                           >
                         </div>
                       </div>
@@ -375,9 +380,10 @@
                   </ul>
                 </li>
                 <li>
-                  We see in the initial statistics that some attributes are
-                  heavily unbalanced. This can be improved using logarithmic or
-                  exponential funcions to balance the data an improve results.
+                  Observamos en las estadísticas iniciales que algunos atributos
+                  están fuertemente desequilibrados. Esto se puede mejorar
+                  utilizando funciones logarítmicas o exponenciales para
+                  equilibrar los datos y mejorar los resultados.
                   <ul>
                     <li>Blood pressure</li>
                     <li>Albumin</li>
@@ -387,49 +393,52 @@
                   </ul>
                 </li>
                 <li>
-                  We have observed that the Serum creatinine levels appear to be
-                  significantly unbalanced. Upon closer examination of the data,
-                  we have identified values such as 76, 32, and 24 mg/dl, which
-                  are considerably elevated for a typical individual. A brief
-                  research indicates that normal values typically range from 0.7
-                  to 1.3 mg/dl, significantly lower than the values that have
-                  raised suspicion. Nonetheless, it's important to consider that
-                  these values could be attributed to an unwell patient, making
-                  them potentially valid. As a result, we have decided to retain
-                  these values in their current form. However, we will remain
-                  vigilant regarding their potential impact in the future and
-                  conduct a more thorough investigation to determine whether
-                  they should be classified as outliers.
+                  Hemos observado que los niveles de Serum creatinine parecen
+                  estar significativamente desequilibrados. Tras un examen más
+                  detenido de los datos, hemos identificado valores como 76, 32
+                  y 24 mg/dl, que son considerablemente elevados para una
+                  persona típica. Una breve investigación indica que los valores
+                  normales suelen oscilar entre 0.7 y 1.3 mg/dl,
+                  significativamente más bajos que los valores que han levantado
+                  sospechas. Sin embargo, es importante tener en cuenta que
+                  estos valores podrían atribuirse a un paciente enfermo, lo que
+                  los hace potencialmente válidos. Como resultado, hemos
+                  decidido mantener estos valores en su forma actual. No
+                  obstante, permaneceremos vigilantes con respecto a su posible
+                  impacto en el futuro y realizaremos una investigación más
+                  exhaustiva para determinar si deben ser clasificados como
+                  valores atípicos.
                 </li>
               </ul>
             </section>
             <section>
-              <h3 class="major">Dealing with missing values</h3>
+              <h3 class="major">Lidiando con valores faltantes</h3>
               <p>
-                When examining the statistics, we notice a substantial presence
-                of missing values. Dealing with this issue offers several
-                approaches. We can choose to substitute them with averages or
-                logically derived data, remove rows containing missing values
-                entirely, or employ machine learning methods to predict the
-                missing values based on available data.
+                Al examinar las estadísticas, notamos una presencia sustancial
+                de valores faltantes. Abordar este problema ofrece varias
+                alternativas. Podemos optar por sustituirlos por promedios o
+                datos derivados de manera lógica, eliminar por completo las
+                filas que contienen valores faltantes, o emplear métodos de
+                aprendizaje automático para predecir los valores faltantes en
+                función de los datos disponibles.
               </p>
               <p>
-                Nevertheless, it's essential to be cautious with these
-                techniques, as they might introduce inaccurate data into the
-                system, potentially compromising or deteriorating the final
-                outcome. Additionally, some algorithms are capable of
-                accommodating missing values. Therefore, in our initial version,
-                we will work with the missing values in their current state. If
-                we identify room for improvement, we can explore these
-                techniques at a later stage.
+                Sin embargo, es esencial ser cauteloso con estas técnicas, ya
+                que podrían introducir datos inexactos en el sistema,
+                potencialmente comprometiendo o deteriorando el resultado final.
+                Además, algunos algoritmos son capaces de manejar valores
+                faltantes. Por lo tanto, en nuestra versión inicial,
+                trabajaremos con los valores faltantes en su estado actual. Si
+                identificamos margen de mejora, podemos explorar estas técnicas
+                en una etapa posterior.
               </p>
             </section>
             <section>
-              <h3 class="major">Studying correlated attributes</h3>
+              <h3 class="major">Estudiando atributos correlacionados</h3>
               <p>
-                Once in RapidMiner we can quicly make use of the
-                <i>Correlation matrix</i> operator to find out more info about
-                these attributes
+                Una vez en RapidMiner, podemos utilizar rápidamente el operador
+                de la <i>matriz de correlación</i> para obtener más información
+                sobre estos atributos.
               </p>
               <div class="col-12">
                 <span class="image fit"
@@ -437,61 +446,68 @@
                 /></span>
               </div>
               <p>
-                At first sight we cant find heavily correlated attributes. The
-                most correlation is between the <b>class</b> atribute with
-                <b>Hemoglobin</b>, <b>packed cell volume</b> and
-                <b>red blood count</b>. However the correlation value does not
-                exceed 0.77, so for now we will leave it as it is.
+                A simple vista, no encontramos atributos altamente
+                correlacionados. La mayor correlación se encuentra entre el
+                atributo <b>clase</b> con <b>hemoglobina</b>,
+                <b>volumen de glóbulos rojos</b> y
+                <b>conteo de glóbulos rojos</b>. Sin embargo, el valor de
+                correlación no supera 0.77, por lo que por el momento lo
+                dejaremos tal como está.
               </p>
             </section>
             <section>
-              <h3 class="major">Modelling</h3>
+              <h3 class="major">Modelado</h3>
               <p>
-                Now to the fun part! We will start processing the data with some
-                ML models to find out if we can predict the target value. Since
-                we are going to try to classify new incoming data into two
-                possible outcomes <i>ckd</i> and <i>notckd</i>, we can clearly
-                identify this as a classification problem, therefore we will
-                make use of classification models.
+                Ahora viene la parte divertida. Comenzaremos a procesar los
+                datos con algunos modelos de aprendizaje automático para
+                averiguar si podemos predecir el valor objetivo. Dado que vamos
+                a intentar clasificar nuevos datos entrantes en dos posibles
+                resultados, <i>ckd</i> y <i>notckd</i>, podemos identificar
+                claramente esto como un problema de clasificación. Por lo tanto,
+                haremos uso de modelos de clasificación.
               </p>
               <p>
-                Some classification models that we can make ous of are
+                Algunos modelos de clasificacion que podemos utilizar son
                 <b>Logistic regression</b>, <b>Linear discriminant analysis</b>,
-                <b>KNN</b> and <b>Naive bayes</b>
+                <b>KNN</b> y <b>Naive bayes</b>
               </p>
-              <h4 class="major">Validation</h4>
+              <h4 class="major">Validación</h4>
               <p>
-                To assess the performance of the models, we will employ the
-                <b>Cross-Validation</b> operator from RM, using a 5-fold
-                strategy. Cross-validation involves dividing the dataset into
-                five subsets, and the model is trained and validated five times.
-                Each fold serves as the validation set exactly once, ensuring
-                thorough assessment. This approach not only utilizes all
-                available data but also tests the model's ability to generalize
-                to unseen data, making it a robust validation method.
+                Para evaluar el rendimiento de los modelos, emplearemos el
+                operador de <b>Cross validaion</b> de RM, utilizando una
+                estrategia de 5 divisiones. La validación cruzada implica
+                dividir el conjunto de datos en cinco subconjuntos, y el modelo
+                se entrena y valida cinco veces. Cada subconjunto se utiliza
+                como conjunto de validación exactamente una vez, garantizando
+                una evaluación exhaustiva. Este enfoque no solo utiliza todos
+                los datos disponibles, sino que también prueba la capacidad del
+                modelo para generalizar a datos no vistos, lo que lo convierte
+                en un método de validación sólido.
               </p>
               <h4 class="major">Feature selection</h4>
               <p>
-                We can see that there are many attributes with information here.
-                Some of these attributes may not be useful, and may also impact
-                negatively not only the performance in terms of efficiency, but
-                the outcome itself.
+                Podemos observar que hay muchas características con información
+                aquí. Algunas de estas características pueden no ser útiles y
+                podrían impactar negativamente no solo en el rendimiento en
+                términos de eficiencia, sino también en el resultado en sí.
               </p>
               <p>
-                To analyze these attributes in search of the most useful ones,
-                we can employ various techniques. However, we will opt for the
-                RM operator called <b>Optimize Selection (evolutionary)</b>.
-                This operator essentially repeats the entire process multiple
-                times, selecting different attributes each time and evaluating
-                their performance. Ultimately, this operator will help us
-                identify the most useful attributes, resulting in improved
-                performance. On a side note, we choose 'evolutionary' because it
-                is the option most likely to prevent reaching a local maximum.
+                Para analizar estas características en busca de las más útiles,
+                podemos emplear diversas técnicas. Sin embargo, optaremos por el
+                operador de RM llamado <b>Optimize selection (evolutionary)</b>.
+                Este operador repite esencialmente todo el proceso varias veces,
+                seleccionando diferentes atributos en cada iteración y evaluando
+                su rendimiento. En última instancia, este operador nos ayudará a
+                identificar las características más útiles, lo que resultará en
+                un mejor rendimiento. Cabe destacar que elegimos 'evolutiva'
+                porque es la opción más probable para evitar llegar a un máximo
+                local.
               </p>
               <h3 class="major">Logistic regression</h3>
               <p>
-                Lets work with the first algorithm, logistic regression. We plug
-                it in the cross validation operator and press play
+                Vamos a trabajar con el primer algoritmo, logistic regression.
+                Lo conectamos al operador de validación cruzada y presionamos
+                "play".
               </p>
               <div class="col-12">
                 <span class="image fit"
@@ -503,7 +519,10 @@
                   ><img src="images/rm/lrpro.png" alt=""
                 /></span>
               </div>
-              <p>After it finishes processing we look at the results:</p>
+              <p>
+                Luego de que termina de procesar los datos, observamos los
+                resultados:
+              </p>
               <div class="col-12">
                 <span class="image fit"
                   ><img src="images/rm/lrresults.png" alt=""
@@ -511,26 +530,28 @@
               </div>
               <h3>100%! 🤯</h3>
               <p>
-                Seems a little too good to be true, doesn't it? There may be
-                some issues with the data that leads to such a good, but false
-                outcome. Also, playing around with the operators we observed
-                that the <b>Optimize Selection</b> operator raised the
-                performance from 98% to 100%. Even tough this may be a
-                misleading result, we will keep working with the other models to
-                see how they perform.
+                Parece un poco demasiado bueno para ser verdad, ¿no? Puede haber
+                problemas con los datos que conducen a un resultado tan bueno
+                pero que resulta ser falso. Por otro lado, observamos que el
+                operador <b>Optimize selection</b> aumentó el rendimiento del
+                98% al 100%. Aunque este resultado puede ser engañoso,
+                continuaremos trabajando con otros modelos para ver cómo se
+                desempeñan. Es importante ser crítico con los resultados y
+                considerar posibles problemas en los datos o en el proceso de
+                modelado.
               </p>
             </section>
             <section>
               <h3 class="major">Linear discriminant analysis</h3>
               <p>
-                LDA does not support working with missing values, but we are
-                going to try it anyways filling the data with average values.
-                This is not a good idea because its made up information, but we
-                are going to try it anyways just to see how it performs. Also,
-                it doesn't support binomial or polynomial attributes. To solve
-                this we will use the operator <b>Nominal to numerical</b>, which
-                will transform the values of binomial and polynomial attributes
-                to numerical ones.
+                LDA no admite trabajar con valores faltantes, pero de todos
+                modos vamos a intentarlo llenando los datos con valores
+                promedio. Esto no es una buena idea porque implica información
+                inventada, pero lo probaremos de todos modos para ver cómo se
+                desempeña. Además, LDA no admite atributos binomiales o
+                polinomiales. Para resolver esto, utilizaremos el operador
+                <b>Nominal to numerical</b>, que transformará los valores de
+                atributos binomiales y polinomiales en valores numéricos.
               </p>
               <div class="col-12">
                 <span class="image fit"
@@ -542,7 +563,10 @@
                   ><img src="images/rm/ldacross.png" alt=""
                 /></span>
               </div>
-              <p>After it finishes processing we look at the results:</p>
+              <p>
+                Luego de que termina de procesar los datos, observamos los
+                resultados:
+              </p>
               <div class="col-12">
                 <span class="image fit"
                   ><img src="images/rm/ldaresults.png" alt=""
@@ -550,30 +574,40 @@
               </div>
               <h3>96.48% 😎</h3>
               <p>
-                Not bad to have so many made up values. playing around with the
-                operators we found out that when leaving out the rows with
-                missing values (a lot of rows), it had a 61% success
-                performance, and autocompleting missing values upgraded it to
-                90%. This is probably due to the very little examples in the
-                dataset that have all the attributes complete. Also we noted
-                that the operator <b>Optimize Selection</b>
-                raised the performance from 90% to 96%! We can clearly see that
-                this operator rocks.
+                No está mal para tener tantos valores inventados. Jugando con
+                los operadores, descubrimos que al dejar fuera las filas con
+                valores faltantes (muchas filas), la precisión fue del 61%, y al
+                autocompletar los valores faltantes, la precisión subió al 90%.
+                Esto se debe probablemente a la escasa cantidad de ejemplos en
+                el conjunto de datos que tienen todos los atributos completos.
+                También notamos que el operador
+                <b>Optimizar Selección</b> aumentó el rendimiento del 90% al
+                96%. Claramente, este operador es muy efectivo. Es importante
+                tener en cuenta cómo los diferentes enfoques para manejar los
+                valores faltantes y la selección de atributos pueden influir en
+                el rendimiento del modelo.
               </p>
             </section>
             <section>
               <h3 class="major">KNN</h3>
               <p>
-                KNN or k-nearest neighbours is a computationally expensive
-                algorithm, but since we wont be working with a huge dataset we
-                will try it out and see how it performs.
+                KNN o k-nearest neighbours es un algoritmo computacionalmente
+                costoso, pero dado que no estaremos trabajando con un conjunto
+                de datos muy grande, lo probaremos para ver cómo se desempeña.
+                Este algoritmo puede ser útil para problemas de clasificación,
+                pero es importante tener en cuenta su costo computacional y
+                considerar si es adecuado para el tamaño de nuestro conjunto de
+                datos.
               </p>
               <div class="col-12">
                 <span class="image fit"
                   ><img src="images/rm/knnconf.png" alt=""
                 /></span>
               </div>
-              <p>After it finishes processing we look at the results:</p>
+              <p>
+                Luego de que termina de procesar los datos, observamos los
+                resultados:
+              </p>
               <div class="col-12">
                 <span class="image fit"
                   ><img src="images/rm/knnper.png" alt=""
@@ -581,34 +615,39 @@
               </div>
               <h3>98.99% 😱</h3>
               <p>
-                Really good performance! We accomplished this after some
-                tweaking with the knn operator parameters, and also some data
-                preprocessing. Running it in the first instance resulted in 61%
-                performance. After that we implemented the
-                <b>Normalize</b> operator, which normalized every attribute.
-                This is especially good for KNN, upgrading it's peformance to
-                91%. After this we tweaked the <b>k</b> parameter of the KNN
-                operator, finding out that the values around "25" turned out to
-                be the most performant ones, upgrading the performance to
-                95.49%. Lastly, we used the trusty operator
-                <b>Optimize Selection</b>, reaching the showed result, almost
-                99%🚀.
+                ¡Excelente rendimiento! Lo logramos después de ajustar algunos
+                parámetros del operador KNN y realizar un preprocesamiento de
+                datos. Ejecutarlo en la primera instancia resultó en un
+                rendimiento del 61%. Después implementamos el operador
+                <b>Normalizar</b>, que normalizó cada atributo. Esto es
+                especialmente útil para KNN y mejoró su rendimiento al 91%.
+                Luego ajustamos el parámetro <b>k</b> del operador KNN y
+                descubrimos que los valores alrededor de "25" resultaron ser los
+                más eficientes, mejorando el rendimiento al 95.49%. Por último,
+                utilizamos el confiable operador <b>Optmize selection</b>,
+                alcanzando el resultado mostrado, casi un 99%🚀. Es evidente
+                cómo el ajuste de parámetros y la selección de atributos pueden
+                impactar significativamente en el rendimiento de un modelo.
               </p>
             </section>
             <section>
               <h3 class="major">Naive Bayes</h3>
               <p>
-                This algorithm assumes independence of features and may not work
-                well with highly correlated features. However as we saw
-                previously there are no higly correlated attributes, so we are
-                going to give it a chance and see how it performs:
+                Este algoritmo asume la independencia de los atributos y puede
+                no funcionar bien con atributos altamente correlacionados. Sin
+                embargo, como vimos anteriormente, no hay atributos altamente
+                correlacionados, por lo que le daremos una oportunidad y veremos
+                cómo se desempeña:
               </p>
               <div class="col-12">
                 <span class="image fit"
                   ><img src="images/rm/naiveconf.png" alt=""
                 /></span>
               </div>
-              <p>After it finishes processing we look at the results:</p>
+              <p>
+                Luego de que termina de procesar los datos, observamos los
+                resultados:
+              </p>
               <div class="col-12">
                 <span class="image fit"
                   ><img src="images/rm/naiveper.png" alt=""
@@ -616,28 +655,38 @@
               </div>
               <h3>100% 🤑</h3>
               <p>
-                Again, amazing performance. And the operator
-                <b>Optimize Selection</b>, did it's thing again, turning an
-                already optimal 99% efficiency to a 100%.
+                Una vez más, un rendimiento sorprendente. Y el operador
+                <b>Optimize selection</b> hizo su trabajo una vez más, llevando
+                una eficiencia que ya era óptima al 100%. Es impresionante cómo
+                este operador puede mejorar el rendimiento incluso en modelos
+                que ya son altamente eficientes.
               </p>
             </section>
             <section>
-              <h2 class="major">Conclusions</h2>
+              <h2 class="major">Conclusiones</h2>
               <p>
-                All these performances seem too good to be true, and this is a
-                bit unsetteling. However after some time thinking of reasons it
-                may work <i>too good</i>, I couldn't find a satisfactory
-                explanation. After all, thanks to the
-                <b>cross validation</b> operator, the models should not be
-                suffering of overfitting, which should be a reason to have such
-                high performance. To continue working on this, the best approach
-                to further validate the models would be to use another dataset
-                that is very similar and already classified, and test the
-                performances to see if it actually works as well as it shows.
-                Lastly, the MVP of this study case will be the operator
-                <b>Optimize Selection</b>, wich optimized every model, from a
-                resource efficiency point of view, to the overall performance of
-                all of them. 🥳
+                Todas estas eficiencias parecen demasiado buenas para ser
+                verdad, lo cual puede ser inquietante. Sin embargo, después de
+                reflexionar durante un tiempo sobre las posibles razones por las
+                que podría funcionar "demasiado bien", no logramos encontrar
+                otra explicación mas que: Realmente funciona!.
+              </p>
+              <p>
+                A pesar de todo, gracias al operador de
+                <b>cross validation</b>, los modelos no deberían estar sufriendo
+                de sobreajuste, lo que podría ser una razón para tener un
+                rendimiento tan alto. Para continuar trabajando en esto, el
+                mejor enfoque para validar aún más los modelos sería utilizar
+                otro conjunto de datos que sea muy similar y ya esté
+                clasificado, y probar las eficiencias para ver si realmente
+                funcionan tan bien como muestran.
+              </p>
+              <p>
+                Por último, el MVP ("jugador mas valioso") de este caso de
+                estudio será el operador
+                <b>Optimize selection</b>, que optimizó cada modelo, tanto desde
+                el punto de vista de la eficiencia de recursos como en el
+                rendimiento general de todos ellos. 🥳
               </p>
             </section>
           </div>
