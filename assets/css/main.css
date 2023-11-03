@@ -3595,11 +3595,11 @@ input, select, textarea {
 			}
 
 		#compras-header {
-				background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/bigcho.jpg");
+				background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/compras/bigcho.jpg");
 			}
 		
 		#kidney-header {
-				background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/bigney.jpg");
+				background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/rm/bigney.jpg");
 			}
 
 		#titanic-header {
