@@ -349,6 +349,16 @@ input, select, textarea {
 			overflow-x: auto;
 		}
 
+			pre code img {
+				border-radius: 5px;
+			}
+
+			pre code .centered {
+				display: flexbox;
+				text-align: center;
+				justify-content: center;
+			}
+
 	hr {
 		border: 0;
 		border-bottom: solid 2px rgba(255, 255, 255, 0.125);
@@ -2463,6 +2473,11 @@ input, select, textarea {
 				width: 100%;
 			}
 
+	.circle-image {
+		aspect-ratio: 1;
+		object-fit: cover;
+	}
+
 /* List */
 
 	ol {
@@ -3586,6 +3601,10 @@ input, select, textarea {
 		#kidney-header {
 				background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/bigney.jpg");
 			}
+
+		#titanic-header {
+			background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/titanic_survivors//titanic-bell.jpg");
+		}
 
 		#wrapper > header {
 			padding: 9em 0 6.25em 0 ;
