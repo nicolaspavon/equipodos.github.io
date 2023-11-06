@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>Predicción de un segundo ataque al corazón</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+      charset="UTF-8"
+    />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript
+      ><link rel="stylesheet" href="assets/css/noscript.css"
+    /></noscript>
+    <link rel="icon" href="images/icon.webp" type="image/x-icon" />
+  </head>
+  <body
+    class="is-preload"
+    style="
+      background-image: linear-gradient(
+          to top,
+          rgba(46, 49, 65, 0.8),
+          rgba(46, 49, 65, 0.8)
+        ),
+        url(images/heart_attack/portada.jpg);
+    "
+  >
+    <!-- Page Wrapper -->
+    <div id="page-wrapper">
+      <!-- Header -->
+      <header id="header">
+        <h1><a href="index.html">Inicio</a></h1>
+        <nav>
+          <a href="#menu">Menu</a>
+        </nav>
+      </header>
+
+      <!-- Menu -->
+      <nav id="menu">
+        <div class="inner">
+          <h2>Menú</h2>
+          <ul class="links">
+            <li><a href="index.html">CV</a></li>
+            <li><a href="data_cleaning.html">Data cleaning examples</a></li>
+          </ul>
+          <a href="#" class="close">Close</a>
+        </div>
+      </nav>
+
+      <!-- Wrapper -->
+      <section id="wrapper">
+        <header id="titanic-header">
+          <div class="inner">
+            <h2>Predicción de un segundo ataque al corazón</h2>
+          </div>
+        </header>
+
+        <!-- Content -->
+        <div class="wrapper">
+          <div class="inner">
+            <section>
+              <h3 class="major">
+                Introducción
+              </h3>
+              <p>
+				Un doctor está interesado en predecir si un paciente que previamente haya experimentado un ataque al
+				corazón vaya o no a experimentar otro. De esta forma podría prevenirse que el paciente padezca del
+				ataque con el tratamiento adecuado.
+              </p>
+			  <h3 class="major">
+                Datasets
+              </h3>
+			  <p>Los datasets de entrenamiento y test se proporcionan a continuación:</p>
+			  <p style="text-align: center">
+				  <a href="datasets/cardiac-training.csv">Entrenamiento</a>	
+			  </p>
+			  <p style="text-align: center">
+				  <a href="datasets/cardiac-scoring.csv">Testing</a>
+			  </p>
+			  <p>
+				Los datasets contienen información de la edad, estado civil, sexo, categoría de peso, colesterol,
+				si el paciente participó de cursos de manejo del estrés y finalmente el nivel de estrés.
+			  </p>
+
+              <h3 class="major">Importando librerías necesarias</h3>
+              <p>
+				El primer paso es importar las librerías. Necesitamos pandas para leer los archivos csv y sklearn para
+				entrenar y aplicar el modelo de Regresión Logística. Se importarán otras funciones de sklearn para facilitar
+				el cross validation y el análisis.
+              </p>
+
+              <pre><code>
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.model_selection import train_test_split
+			  </code></pre>
+
+              <h3 class="major">Cargando y viendo el dataset</h3>
+
+              <p>
+                Comencemos examinando el dataset de entrenamiento para conocer nuestros datos y sus formatos. También
+				para realizar tareas de cross validation y verificar que el modelo se comportará bien frente a los
+				datos de testing próximamente.
+              </p>
+
+              <pre><code>
+df = pd.read_csv("cardiac-training.csv", header=0)
+print(df.columns)
+			  </code></pre>
+			  <p>
+				La siguiente información se imprimirá por pantalla:
+			  </p>
+			  <pre><code>
+Index(['Edad', 'Estado_civil', 'Sexo', 'Categoria_Peso', 'Colesterol',
+'Manejo_stress', 'Trat_ansiedad', '2do_Ataque_Corazon'],
+dtype='object')
+			  </code></pre>
+			  <p>
+				La variable objetivo en este caso es '2do_Ataque_Corazon', correspondiendo a si dicho paciente experimentó
+				un segundo ataque al corazón o no. A primera vista, todos los atributos parecen importantes, por lo que
+				no descartaremos ninguno.
+			  </p>
+
+			  <h3 class="major">Entrenamiento y validación del modelo</h3>
+
+			  <p>
+				Antes de utilizar el dataset de testing, queremos asegurarnos de que el modelo funciona. Esto puede realizarse mediante
+				cross validation, dividiendo el dataset de entrenamiento en dos más pequeños, uno para entrenamiento y otro para testing.
+				Al predecir si alguien tendrá un segundo ataque al corazón, no tendremos el valor de la variable objetivo, por lo que no
+				podemos realizar un análisis de la precisión de los resultados. El dataset se dividirá en 70-30% de forma aleatoria.
+			  </p>
+			  <pre>
+				<code>
+X = df.loc[:,df.columns != '2do_Ataque_Corazon']
+y = df['2do_Ataque_Corazon'].values
+train_X, test_X, train_y, test_y = train_test_split(X, y, test_size=0.30,random_state=0, shuffle=True)
+				</code>
+			  </pre>
+
+			  <p>
+				Ahora debemos entrenar y aplicar el modelo.
+			  </p>
+
+			  <pre>
+				<code>
+lr = LogisticRegression()
+lr.fit(train_X, train_y)
+
+y_pred = lr.predict(test_X)
+				</code>
+			  </pre>
+
+			  <p>
+				Imprimir la Matriz de Confusión y el Reporte de Clasificación nos dará la información sobre la precisión de nuestro modelo.
+			  </p>
+
+			  <pre>
+				<code>
+print(classification_report(test_y, y_pred, digits=3))
+print(confusion_matrix(test_y, y_pred))
+				</code>
+	  		  </pre>
+			
+				<pre>
+					<code>
+               precision    recall  f1-score   support
+
+          No      0.941     0.842     0.889        19
+          Si      0.880     0.957     0.917        23
+
+    accuracy                          0.905        42
+   macro avg      0.911     0.899     0.903        42
+weighted avg      0.908     0.905     0.904        42
+
+[[16  3]
+[ 1 22]]
+					</code>
+				</pre>
+			
+				<p>
+					Vemos que en total obtuvimos únicamente 4 predicciones erróneas. Este número puede variar dependiendo de las muestras
+					aleatorias en cada conjunto, pero es una baja cantidad de fallos. Esto indica que el modelo se comporta correctamente.
+				</p>
+
+			  <h3 class="major">Aplicación del modelo</h3>
+
+			  <p>
+				Sabiendo que el modelo funciona, podemos ahora aplicarlo a el dataset de testing. A continuación se provee el código
+				modificado para aplicar el modelo sobre el dataset deseado.
+			  </p>
+
+			  <pre>
+				<code>
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.model_selection import train_test_split
+
+input_file = "cardiac-training.csv"
+df = pd.read_csv(input_file, header=0)
+input_file_scoring = "cardiac-scoring.csv"
+df_scoring = pd.read_csv(input_file_scoring, header=0)
+
+X = df.loc[:, df.columns != '2do_Ataque_Corazon']
+y = df['2do_Ataque_Corazon'].values
+
+lr = LogisticRegression()
+lr = lr.fit(X, y)
+
+X_scoring = df_scoring.loc[:]
+y_pred = lr.predict(X_scoring)
+				</code>
+  			  </pre>
+
+				<p>
+					Nuestras predicciones fueron realizadas. Ahora es nuestro trabajo, dados los inputs, analizar si estas tienen sentido. Por ejemplo,
+					el ejemplo 11. La predicción es que 'Si'. El paciente tiene alto sobrepeso, es de la tercera edad con alto colesterol y alto nivel de
+					estrés. En conclusión, esta predicción parece ser correcta. Las predicciones realizadas se presentan a continuación:
+				</p>
+				<pre>
+					<code>
+Predicted
+['No' 'Si' 'No' 'Si' 'No' 'No' 'No' 'No' 'Si' 'No' 'Si' 'No' 'Si' 'Si'
+'No' 'Si' 'Si' 'No' 'No' 'Si' 'No' 'Si' 'No' 'Si' 'No' 'Si' 'Si' 'Si'
+'Si' 'No' 'Si' 'No' 'No' 'No' 'No' 'Si' 'Si' 'No' 'Si' 'No' 'No' 'No'
+'No' 'Si' 'No' 'No' 'No' 'No' 'Si' 'No' 'No' 'No' 'No' 'Si' 'Si' 'Si'
+'No' 'Si' 'Si' 'No' 'No' 'No' 'Si' 'Si' 'No' 'Si' 'Si' 'No' 'Si' 'No'
+'No' 'No' 'Si' 'No' 'No' 'Si' 'No' 'No' 'No' 'Si' 'Si' 'No' 'No' 'Si'
+'No' 'Si' 'Si' 'No' 'Si' 'Si' 'Si' 'No' 'No' 'No' 'No' 'No' 'No' 'No'
+'No' 'No' 'No' 'Si' 'No' 'Si' 'Si' 'Si' 'No' 'Si' 'No' 'No' 'Si' 'Si'
+'No' 'Si' 'No' 'Si' 'Si' 'No' 'Si' 'No' 'No' 'No' 'No' 'Si' 'Si' 'No'
+'Si' 'Si' 'Si' 'No' 'No' 'No' 'No' 'Si' 'No' 'No' 'Si' 'Si' 'Si' 'Si'
+'Si' 'Si' 'Si' 'No' 'Si' 'No' 'No' 'No' 'No' 'No' 'No' 'No' 'Si' 'Si'
+'No' 'Si' 'Si' 'No' 'Si' 'Si' 'Si' 'No' 'No' 'Si' 'No' 'No' 'Si' 'Si'
+'No' 'Si' 'Si' 'No' 'No' 'No' 'No' 'No' 'No' 'No' 'Si' 'Si' 'Si' 'Si'
+'No' 'Si' 'Si' 'No' 'Si' 'Si' 'Si' 'Si' 'Si' 'No' 'No' 'No' 'Si' 'No'
+'Si' 'Si' 'No' 'No' 'No' 'No' 'Si' 'No' 'No' 'Si' 'No' 'No' 'No' 'No'
+'Si' 'Si' 'Si' 'No' 'No' 'No' 'No' 'Si' 'Si' 'Si' 'No' 'Si' 'No' 'Si'
+'No' 'Si' 'Si' 'No' 'No' 'No' 'No' 'Si' 'No' 'Si' 'Si' 'Si' 'No' 'No'
+'Si' 'Si' 'No' 'No' 'No' 'Si' 'Si' 'No' 'Si' 'Si' 'No' 'No' 'No' 'Si'
+'Si' 'Si' 'Si' 'Si' 'No' 'No' 'Si' 'No' 'Si' 'Si' 'No' 'Si' 'Si' 'Si'
+'Si' 'No' 'Si' 'Si' 'Si' 'Si' 'Si' 'No' 'Si' 'Si' 'Si' 'No' 'No' 'No'
+'Si' 'No' 'No' 'Si' 'Si' 'No' 'No' 'No' 'No' 'Si' 'No' 'Si' 'Si' 'Si'
+'Si' 'No' 'Si' 'Si' 'Si' 'Si' 'Si' 'No' 'Si' 'No' 'No' 'Si' 'Si' 'Si'
+'Si' 'Si' 'No' 'Si' 'No' 'No' 'No' 'Si' 'Si' 'Si' 'No' 'Si' 'No' 'Si'
+'No' 'No' 'No' 'No' 'Si' 'No' 'Si' 'Si' 'Si' 'No' 'No' 'No' 'Si' 'No'
+'Si' 'Si' 'No' 'No' 'Si' 'No' 'No' 'No' 'No' 'Si' 'Si' 'Si' 'No' 'Si'
+'No' 'No' 'Si' 'Si' 'Si' 'No' 'Si' 'No' 'Si' 'No' 'No' 'No' 'No' 'No'
+'Si' 'No' 'Si' 'No' 'Si' 'No' 'Si' 'No' 'No' 'No' 'No' 'Si' 'Si' 'Si'
+'No' 'Si' 'No' 'Si' 'Si' 'No' 'No' 'No' 'No' 'Si' 'Si' 'Si' 'No' 'Si'
+'Si' 'Si' 'Si' 'No' 'No' 'No' 'Si' 'Si' 'No' 'Si' 'Si' 'No' 'No' 'No'
+'No' 'Si' 'Si' 'No' 'No' 'Si' 'Si' 'Si' 'Si' 'No' 'Si' 'No' 'Si' 'Si'
+'Si' 'No' 'No' 'No' 'Si' 'No' 'Si' 'Si' 'Si' 'Si' 'No' 'No' 'Si' 'No'
+'No' 'Si' 'No' 'No' 'No' 'No' 'Si' 'Si' 'No' 'No' 'No' 'No' 'Si' 'No'
+'No' 'No' 'No' 'Si' 'No' 'Si' 'Si' 'Si' 'No' 'No' 'Si' 'Si' 'Si' 'No'
+'Si' 'Si' 'Si' 'No' 'No' 'No' 'Si' 'No' 'No' 'No' 'No' 'Si' 'Si' 'No'
+'Si' 'No' 'No' 'No' 'No' 'Si' 'Si' 'No' 'Si' 'Si' 'Si' 'No' 'Si' 'No'
+'Si' 'Si' 'No' 'Si' 'Si' 'Si' 'No' 'No' 'No' 'Si' 'No' 'Si' 'No' 'Si'
+'Si' 'No' 'No' 'No' 'Si' 'Si' 'No' 'Si' 'No' 'No' 'No' 'Si' 'Si' 'No'
+'Si' 'Si' 'Si' 'Si' 'Si' 'Si' 'Si' 'No' 'Si' 'No' 'Si' 'No' 'No' 'No'
+'No' 'No' 'Si' 'Si' 'Si' 'No' 'No' 'No' 'No' 'No' 'Si' 'No' 'No' 'No'
+'Si' 'Si' 'Si' 'No' 'No' 'Si' 'Si' 'Si' 'Si' 'No' 'No' 'Si' 'Si' 'No'
+'No' 'No' 'Si' 'No' 'Si' 'Si' 'Si' 'Si' 'No' 'No' 'Si' 'No' 'No' 'No'
+'Si' 'Si' 'No' 'No' 'No' 'Si' 'Si' 'Si' 'No' 'Si' 'Si' 'Si' 'Si' 'Si'
+'Si' 'Si' 'Si' 'No' 'Si' 'No' 'Si' 'Si' 'Si' 'No' 'No' 'No' 'Si' 'No'
+'No' 'No' 'Si' 'No' 'Si' 'Si' 'No' 'Si' 'Si' 'Si' 'Si' 'No' 'No' 'Si'
+'No' 'Si' 'No' 'Si' 'Si' 'No' 'No' 'No' 'No' 'No' 'No' 'No' 'No' 'No'
+'Si' 'No' 'Si' 'No' 'Si' 'No' 'Si' 'Si' 'No' 'No' 'No' 'Si' 'Si' 'No'
+'Si' 'Si' 'Si' 'No' 'No' 'Si' 'No' 'No' 'No' 'No' 'No' 'No' 'No' 'No'
+'No' 'Si' 'Si' 'No' 'No' 'No' 'Si' 'No' 'No' 'Si' 'No' 'Si' 'Si' 'No'
+'No' 'Si' 'Si' 'Si' 'Si' 'No' 'No' 'No' 'Si' 'No' 'Si' 'No' 'No' 'Si'
+'Si' 'No' 'No' 'Si']
+					</code>
+				</pre>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <div id="footer"></div>
+      <script src="/scripts/footer.js"></script>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrollex.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>
