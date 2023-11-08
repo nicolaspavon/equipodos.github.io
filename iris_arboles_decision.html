@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>Árboles de decisión para clasificación de Iris setosa</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+      charset="UTF-8"
+    />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript
+      ><link rel="stylesheet" href="assets/css/noscript.css"
+    /></noscript>
+    <link rel="icon" href="images/icon.webp" type="image/x-icon" />
+  </head>
+  <body
+    class="is-preload"
+    style="
+      background-image: linear-gradient(
+          to top,
+          rgba(46, 49, 65, 0.8),
+          rgba(46, 49, 65, 0.8)
+        ),
+        url(images/iris_cart/iris-setosa.jpg);
+    "
+  >
+    <!-- Page Wrapper -->
+    <div id="page-wrapper">
+      <!-- Header -->
+      <header id="header">
+        <h1><a href="index.html">Inicio</a></h1>
+        <nav>
+          <a href="#menu">Menu</a>
+        </nav>
+      </header>
+
+      <!-- Menu -->
+      <nav id="menu">
+        <div class="inner">
+          <h2>Menú</h2>
+          <ul class="links">
+            <li><a href="index.html">CV</a></li>
+            <li><a href="data_cleaning.html">Data cleaning examples</a></li>
+          </ul>
+          <a href="#" class="close">Close</a>
+        </div>
+      </nav>
+
+      <!-- Wrapper -->
+      <section id="wrapper">
+        <header id="titanic-header">
+          <div class="inner">
+            <h2>ÁRBOLES DE DECISIÓN PARA CLASIFICACIÓN DE IRIS SETOSA</h2>
+          </div>
+        </header>
+
+        <!-- Content -->
+        <div class="wrapper">
+          <div class="inner">
+            <section>
+              <h3 class="major">Introducción</h3>
+
+              <p>
+                En este caso de estudio, vamos a crear árboles de decisión para
+                la clasificación de iris-setosa. Primero, crearemos un árbol de
+                decisión utilizando RapidMiner, y luego, lo haremos con Python y
+                scikit-learn. Finalmente, comparamos los resultados obtenidos.
+              </p>
+
+              <h3 class="major">Modelo en RapidMiner</h3>
+
+              <h4>Definiendo los Operadores Necesarios</h4>
+
+              <p>
+                Estaremos trabajando con el reconocido dataset de Iris setosa.
+                Convenientemente, RapidMiner ya viene con el dataset pronto para
+                ser usado, así que importar dicho dataset será tan sencillo como
+                agregar un operador <strong>Retrieve</strong> que se encarge de
+                importarlo de la carpeta <i>Samples/Data</i>.
+              </p>
+
+              <p>
+                Luego de importar el dataset, vamos a necesitar crear el modelo,
+                para ello, vamos a usar el operador
+                <strong>Decision Tree</strong> que nos ofrece RapidMiner.
+                Además, usaremos los operadores <strong>Apply Model</strong> y
+                <strong>Performance (Classification)</strong> (ya que sabemos
+                que es un problema de clasificación).
+              </p>
+
+              <p>
+                Como último detalle, claramente nos interesa que nuestro modelo
+                sea validado apropiadamente y las métricas obtenidas no nos
+                engañen, así que incluiremos estos últimos tres operadores
+                apropiadamente en un operador de
+                <strong>Cross Validation</strong>.
+              </p>
+
+              <h4>Proceso Creado</h4>
+
+              <p>
+                Luego de agregar y conectar los operadores comentados
+                anteriormente, el proceso de RapidMiner se ve de la siguiente
+                manera.
+              </p>
+
+              <p><i>Proceso principal</i></p>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/iris_cart/process.png" alt=""
+                /></span>
+              </div>
+
+              <p><i>Cross Validation</i></p>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/iris_cart/cross-validation.png" alt=""
+                /></span>
+              </div>
+
+              <p>
+                Los resultados de este modelo los veremos un par de secciones
+                más adelante, cuando comparemos los resultados de los dos
+                modelos creados.
+              </p>
+
+              <h3 class="major">Modelo con Python + scikit-learn</h3>
+
+              <h4>Definiendo el Procedimiento</h4>
+
+              <p>
+                El procedimiento que vamos a emplear es el clásico procedimiento
+                en Python que engloba muchos casos de estudio: importamos
+                librerías necesarias, descargamos el dataset y lo dividimos en
+                el conjunto de entrenamiento y testing, creamos y entrenamos el
+                modelo y, por último, evaluamos el modelo. Aunque como paso
+                extra, esta vez nos interesa ver el árbol de decisión creado
+                (algo particularmente interesante para estos modelos
+                arborescentes), así que lo graficaremos como último paso.
+              </p>
+
+              <p>
+                Cada una de las siguientes celdas de código, ejecuta cada paso
+                descrito, en orden.
+              </p>
+
+              <p><i>Importando librerías necesarias</i></p>
+              <pre><code>from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.metrics import accuracy_score, classification_report
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+</code></pre>
+
+              <p><i>Preparando el dataset</i></p>
+              <pre><code># Cargar el dataset Iris
+data = load_iris()
+X = data.data
+y = data.target
+
+# Dividir el conjunto de datos en datos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+</code></pre>
+
+              <p><i>Creando y entrenando el modelo</i></p>
+              <pre><code># Crear un modelo de árbol de decisión
+clf = DecisionTreeClassifier()
+
+# Entrenar el modelo
+clf.fit(X_train, y_train)</code></pre>
+
+              <p><i>Evaluando resultados</i></p>
+              <pre><code># Realizar predicciones en el conjunto de prueba
+y_pred = clf.predict(X_test)
+
+# Calcular la precisión del modelo
+accuracy = accuracy_score(y_test, y_pred)
+print("Precisión del modelo: {:.2f}%".format(accuracy * 100))
+
+# Generar un reporte de clasificación
+class_names = data.target_names
+report = classification_report(y_test, y_pred, target_names=class_names)
+print("Reporte de Clasificación:\n", report)</code></pre>
+
+              <p><i>Graficando el árbol de decisión obtenido</i></p>
+              <pre><code># Ver el árbol de decisión
+plt.figure(figsize=(12, 8))
+plot_tree(clf, filled=True, feature_names=data.feature_names, class_names=class_names)
+plt.show()</code></pre>
+
+              <p>
+                En particular, las salidas que nos interesa analizar son las
+                últimas dos (los resultados del modelo y el árbol creado). Estas
+                las analizamos en la siguiente sección.
+              </p>
+
+              <h3 class="major">Resultados</h3>
+
+              <p>
+                Aquí mostramos los resultados obtenidos para cada modelo en
+                ambas plataformas.
+              </p>
+
+              <p>
+                Veamos primero el rendimiento del modelo creado en RapidMiner.
+              </p>
+
+              <p><i>Resultado del modelo en RapidMiner</i></p>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/iris_cart/confusion-matrix-rm.png" alt=""
+                /></span>
+              </div>
+
+              <p>
+                Como se ve claramente en la matriz de confusión, el resultado es
+                bastante bueno. Aún así, notamos que el modelo clasificó
+                incorrectamente 7 de los 150 ejemplos (4 Iris-versicolor y 3
+                Iris-virginica, en particular confundiéndolos entre sí).
+              </p>
+
+              <p>
+                El resultado del modelo entrenado en scikit-learn es el
+                siguiente.
+              </p>
+
+              <p><i>Resultado del modelo de scikit-learn</i></p>
+              <pre><code>Precisión del modelo: 100.00%
+Reporte de Clasificación:
+                precision    recall  f1-score   support
+
+      setosa       1.00      1.00      1.00        10
+  versicolor       1.00      1.00      1.00         9
+   virginica       1.00      1.00      1.00        11
+
+    accuracy                           1.00        30
+   macro avg       1.00      1.00      1.00        30
+weighted avg       1.00      1.00      1.00        30</code></pre>
+
+              <p>
+                Como se puede ver, son perfectos. El hecho de que sean distintos
+                a los obtenidos en RapidMiner se debe a los valores de los
+                parámetros de los modelos, que difieren entre las plataformas.
+                Esto, a su vez, resulta en árboles diferentes, como se verá a
+                continuación.
+              </p>
+
+              <p>En cuanto a los árboles obtenidos, son los siguientes.</p>
+
+              <p><i>Árbol de decisión en RapidMiner</i></p>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/iris_cart/cart-rm.png" alt=""
+                /></span>
+              </div>
+
+              <p><i>Árbol de decisión en scikit-learn</i></p>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/iris_cart/cart-scikit-learn.png" alt=""
+                /></span>
+              </div>
+
+              <p>
+                Estos árboles son bastante valiosos en casos donde necesitamos
+                poder <strong><i>explicar</i></strong> qué decisiones tomó el
+                modelo, o <strong><i>justificar</i></strong> su decisión. Muchas
+                veces no es suficiente simplemente obtener una predicción; en
+                algunos contextos poder explicar la decisión del algoritmo es
+                fundamental, y por eso estos algoritmos de caja blanca son muy
+                útiles.
+              </p>
+
+              <h3 class="major">Conclusión</h3>
+
+              <p>
+                Haciéndonos de dos plataformas como lo son RapidMiner y Python +
+                scikit-learn, logramos encarar el mismo problema desde las dos,
+                obteniendo dos modelos de árboles de decisión, además de
+                analizar la performance de estos y su árbol resultado.
+              </p>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <div id="footer"></div>
+      <script src="/scripts/footer.js"></script>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrollex.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>
