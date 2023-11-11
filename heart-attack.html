@@ -41,16 +41,8 @@
       </header>
 
       <!-- Menu -->
-      <nav id="menu">
-        <div class="inner">
-          <h2>Menú</h2>
-          <ul class="links">
-            <li><a href="index.html">CV</a></li>
-            <li><a href="data_cleaning.html">Data cleaning examples</a></li>
-          </ul>
-          <a href="#" class="close">Close</a>
-        </div>
-      </nav>
+      <div id="menu"></div>
+      <script src="/scripts/menu.js"></script>
 
       <!-- Wrapper -->
       <section id="wrapper">
@@ -64,34 +56,36 @@
         <div class="wrapper">
           <div class="inner">
             <section>
-              <h3 class="major">
-                Introducción
-              </h3>
+              <h3 class="major">Introducción</h3>
               <p>
-				Un doctor está interesado en predecir si un paciente que previamente haya experimentado un ataque al
-				corazón vaya o no a experimentar otro. De esta forma podría prevenirse que el paciente padezca del
-				ataque con el tratamiento adecuado.
+                Un doctor está interesado en predecir si un paciente que
+                previamente haya experimentado un ataque al corazón vaya o no a
+                experimentar otro. De esta forma podría prevenirse que el
+                paciente padezca del ataque con el tratamiento adecuado.
               </p>
-			  <h3 class="major">
-                Datasets
-              </h3>
-			  <p>Los datasets de entrenamiento y test se proporcionan a continuación:</p>
-			  <p style="text-align: center">
-				  <a href="datasets/cardiac-training.csv">Entrenamiento</a>	
-			  </p>
-			  <p style="text-align: center">
-				  <a href="datasets/cardiac-scoring.csv">Testing</a>
-			  </p>
-			  <p>
-				Los datasets contienen información de la edad, estado civil, sexo, categoría de peso, colesterol,
-				si el paciente participó de cursos de manejo del estrés y finalmente el nivel de estrés.
-			  </p>
+              <h3 class="major">Datasets</h3>
+              <p>
+                Los datasets de entrenamiento y test se proporcionan a
+                continuación:
+              </p>
+              <p style="text-align: center">
+                <a href="datasets/cardiac-training.csv">Entrenamiento</a>
+              </p>
+              <p style="text-align: center">
+                <a href="datasets/cardiac-scoring.csv">Testing</a>
+              </p>
+              <p>
+                Los datasets contienen información de la edad, estado civil,
+                sexo, categoría de peso, colesterol, si el paciente participó de
+                cursos de manejo del estrés y finalmente el nivel de estrés.
+              </p>
 
               <h3 class="major">Importando librerías necesarias</h3>
               <p>
-				El primer paso es importar las librerías. Necesitamos pandas para leer los archivos csv y sklearn para
-				entrenar y aplicar el modelo de Regresión Logística. Se importarán otras funciones de sklearn para facilitar
-				el cross validation y el análisis.
+                El primer paso es importar las librerías. Necesitamos pandas
+                para leer los archivos csv y sklearn para entrenar y aplicar el
+                modelo de Regresión Logística. Se importarán otras funciones de
+                sklearn para facilitar el cross validation y el análisis.
               </p>
 
               <pre><code>
@@ -104,38 +98,42 @@ from sklearn.model_selection import train_test_split
               <h3 class="major">Cargando y viendo el dataset</h3>
 
               <p>
-                Comencemos examinando el dataset de entrenamiento para conocer nuestros datos y sus formatos. También
-				para realizar tareas de cross validation y verificar que el modelo se comportará bien frente a los
-				datos de testing próximamente.
+                Comencemos examinando el dataset de entrenamiento para conocer
+                nuestros datos y sus formatos. También para realizar tareas de
+                cross validation y verificar que el modelo se comportará bien
+                frente a los datos de testing próximamente.
               </p>
 
               <pre><code>
 df = pd.read_csv("cardiac-training.csv", header=0)
 print(df.columns)
 			  </code></pre>
-			  <p>
-				La siguiente información se imprimirá por pantalla:
-			  </p>
-			  <pre><code>
+              <p>La siguiente información se imprimirá por pantalla:</p>
+              <pre><code>
 Index(['Edad', 'Estado_civil', 'Sexo', 'Categoria_Peso', 'Colesterol',
 'Manejo_stress', 'Trat_ansiedad', '2do_Ataque_Corazon'],
 dtype='object')
 			  </code></pre>
-			  <p>
-				La variable objetivo en este caso es '2do_Ataque_Corazon', correspondiendo a si dicho paciente experimentó
-				un segundo ataque al corazón o no. A primera vista, todos los atributos parecen importantes, por lo que
-				no descartaremos ninguno.
-			  </p>
+              <p>
+                La variable objetivo en este caso es '2do_Ataque_Corazon',
+                correspondiendo a si dicho paciente experimentó un segundo
+                ataque al corazón o no. A primera vista, todos los atributos
+                parecen importantes, por lo que no descartaremos ninguno.
+              </p>
 
-			  <h3 class="major">Entrenamiento y validación del modelo</h3>
+              <h3 class="major">Entrenamiento y validación del modelo</h3>
 
-			  <p>
-				Antes de utilizar el dataset de testing, queremos asegurarnos de que el modelo funciona. Esto puede realizarse mediante
-				cross validation, dividiendo el dataset de entrenamiento en dos más pequeños, uno para entrenamiento y otro para testing.
-				Al predecir si alguien tendrá un segundo ataque al corazón, no tendremos el valor de la variable objetivo, por lo que no
-				podemos realizar un análisis de la precisión de los resultados. El dataset se dividirá en 70-30% de forma aleatoria.
-			  </p>
-			  <pre>
+              <p>
+                Antes de utilizar el dataset de testing, queremos asegurarnos de
+                que el modelo funciona. Esto puede realizarse mediante cross
+                validation, dividiendo el dataset de entrenamiento en dos más
+                pequeños, uno para entrenamiento y otro para testing. Al
+                predecir si alguien tendrá un segundo ataque al corazón, no
+                tendremos el valor de la variable objetivo, por lo que no
+                podemos realizar un análisis de la precisión de los resultados.
+                El dataset se dividirá en 70-30% de forma aleatoria.
+              </p>
+              <pre>
 				<code>
 X = df.loc[:,df.columns != '2do_Ataque_Corazon']
 y = df['2do_Ataque_Corazon'].values
@@ -143,11 +141,9 @@ train_X, test_X, train_y, test_y = train_test_split(X, y, test_size=0.30,random_
 				</code>
 			  </pre>
 
-			  <p>
-				Ahora debemos entrenar y aplicar el modelo.
-			  </p>
+              <p>Ahora debemos entrenar y aplicar el modelo.</p>
 
-			  <pre>
+              <pre>
 				<code>
 lr = LogisticRegression()
 lr.fit(train_X, train_y)
@@ -156,18 +152,19 @@ y_pred = lr.predict(test_X)
 				</code>
 			  </pre>
 
-			  <p>
-				Imprimir la Matriz de Confusión y el Reporte de Clasificación nos dará la información sobre la precisión de nuestro modelo.
-			  </p>
+              <p>
+                Imprimir la Matriz de Confusión y el Reporte de Clasificación
+                nos dará la información sobre la precisión de nuestro modelo.
+              </p>
 
-			  <pre>
+              <pre>
 				<code>
 print(classification_report(test_y, y_pred, digits=3))
 print(confusion_matrix(test_y, y_pred))
 				</code>
 	  		  </pre>
-			
-				<pre>
+
+              <pre>
 					<code>
                precision    recall  f1-score   support
 
@@ -182,20 +179,23 @@ weighted avg      0.908     0.905     0.904        42
 [ 1 22]]
 					</code>
 				</pre>
-			
-				<p>
-					Vemos que en total obtuvimos únicamente 4 predicciones erróneas. Este número puede variar dependiendo de las muestras
-					aleatorias en cada conjunto, pero es una baja cantidad de fallos. Esto indica que el modelo se comporta correctamente.
-				</p>
 
-			  <h3 class="major">Aplicación del modelo</h3>
+              <p>
+                Vemos que en total obtuvimos únicamente 4 predicciones erróneas.
+                Este número puede variar dependiendo de las muestras aleatorias
+                en cada conjunto, pero es una baja cantidad de fallos. Esto
+                indica que el modelo se comporta correctamente.
+              </p>
 
-			  <p>
-				Sabiendo que el modelo funciona, podemos ahora aplicarlo a el dataset de testing. A continuación se provee el código
-				modificado para aplicar el modelo sobre el dataset deseado.
-			  </p>
+              <h3 class="major">Aplicación del modelo</h3>
 
-			  <pre>
+              <p>
+                Sabiendo que el modelo funciona, podemos ahora aplicarlo a el
+                dataset de testing. A continuación se provee el código
+                modificado para aplicar el modelo sobre el dataset deseado.
+              </p>
+
+              <pre>
 				<code>
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
@@ -218,12 +218,16 @@ y_pred = lr.predict(X_scoring)
 				</code>
   			  </pre>
 
-				<p>
-					Nuestras predicciones fueron realizadas. Ahora es nuestro trabajo, dados los inputs, analizar si estas tienen sentido. Por ejemplo,
-					el ejemplo 11. La predicción es que 'Si'. El paciente tiene alto sobrepeso, es de la tercera edad con alto colesterol y alto nivel de
-					estrés. En conclusión, esta predicción parece ser correcta. Las predicciones realizadas se presentan a continuación:
-				</p>
-				<pre>
+              <p>
+                Nuestras predicciones fueron realizadas. Ahora es nuestro
+                trabajo, dados los inputs, analizar si estas tienen sentido. Por
+                ejemplo, el ejemplo 11. La predicción es que 'Si'. El paciente
+                tiene alto sobrepeso, es de la tercera edad con alto colesterol
+                y alto nivel de estrés. En conclusión, esta predicción parece
+                ser correcta. Las predicciones realizadas se presentan a
+                continuación:
+              </p>
+              <pre>
 					<code>
 Predicted
 ['No' 'Si' 'No' 'Si' 'No' 'No' 'No' 'No' 'Si' 'No' 'Si' 'No' 'Si' 'Si'
