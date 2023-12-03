@@ -6,7 +6,7 @@
 -->
 <html>
   <head>
-    <title>State purchases</title>
+    <title>Compras Estatales</title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -48,7 +48,7 @@
       <section id="wrapper">
         <header id="compras-header">
           <div class="inner">
-            <h2>ANALYZING URUGUAYAN GOVERNMENT PURCHASES</h2>
+            <h2>ANALIZANDO COMPRAS DEL GOBIERNO URUGUAYO</h2>
           </div>
         </header>
 
@@ -56,124 +56,127 @@
         <div class="wrapper">
           <div class="inner">
             <section>
-              <h3 class="major">It's all about money</h3>
+              <h3 class="major">Todo es sobre dinero</h3>
               <p>
-                In today's world, corruption is an issue that affects every
-                country. Therefore, having a standard to store government
-                purchases, like the
+                En el mundo actual, la corrupción es un problema que afecta a
+                todos los países. Por lo tanto, contar con un estándar para
+                almacenar las compras gubernamentales, como el
+
                 <a href="https://standard.open-contracting.org/latest/en/"
-                  >Open Contracting Data Standard (OCDS).</a
-                >, plays a vital role in uncovering fraudulent activities and
-                financial misuse by the government. Luckily, in my home country,
-                Uruguay, this standard has been used since 2015 to store a wide
-                range of government purchases, and this data is publicly
-                available for free use on the
+                  >Estándar de Datos de Contrataciones (OCDS, por sus siglas en
+                  inglés)</a
+                >, desempeña un papel crucial en descubrir actividades
+                fraudulentas y mal uso financiero por parte del gobierno.
+                Afortunadamente, en Uruguay, este estándar se ha utilizado desde
+                2015 para almacenar una amplia gama de compras gubernamentales,
+                y estos datos están disponibles públicamente de forma gratuita
+                en la página web de
                 <a
                   href="https://catalogodatos.gub.uy/dataset/arce-datos-historicos-de-compras"
                   >Datos Abiertos</a
-                >
-                webpage.
+                >.
                 <br />
                 <br />
-                In this case study, we will analyze this data in search of
-                interesting patterns and characteristics, which hopefully (or
-                not), will reveal some misuse of government funds.
+                En este estudio de caso, analizaremos estos datos en busca de
+                patrones y características interesantes que, con suerte (o no),
+                revelarán algún mal uso de los fondos gubernamentales.
               </p>
 
-              <h3 class="major">inspiration</h3>
+              <h3 class="major">Inspiración</h3>
               <p>
-                While looking for a interesting dataset to demonstrate my ML
-                skills, i came across the website
-                <a href="http://cuentasclaras.uy/#/home">Cuentas claras</a> . In
-                there, the owners try to reveal fraudulent purchases and misuse
-                of government founds by applying a "function", which analyzes
-                certain parameters and returns a value, in their case, "red
-                flags". This idea of "red flags" is not new, and as we can see
-                in the
+                Al buscar un conjunto de datos interesante para demostrar
+                nuestras habilidades de Machine Learning, nos encontramos con el
+                sitio web
+                <a href="http://cuentasclaras.uy/#/home">Cuentas claras</a>. En
+                ese sitio, los propietarios intentan revelar compras
+                fraudulentas y mal uso de fondos gubernamentales aplicando una
+                "función" que analiza ciertos parámetros y devuelve un valor, en
+                su caso, "red flags". Esta idea de "red flags" no es nueva, y
+                como podemos ver en el
                 <a
                   href="https://www.open-contracting.org/2016/11/30/red-flags-integrity-giving-green-light-open-data-solutions/"
-                  >OCDS website</a
-                >, this was already attempted by a few countries, and there are
-                guides to work the OCDS data looking for these red flags.
-                <br />
+                  >sitio web de OCDS</a
+                >, ya ha sido intentada por algunos países, y existen guías para
+                trabajar con los datos de OCDS en busca de estas red flags.
               </p>
               <div class="col-12">
                 <span class="image fit"
                   ><img src="images/compras/claras.png" alt="" />
-                  <p><i>Cuentas claras website</i></p></span
+                  <p><i>Sitio web de Cuentas Claras</i></p></span
                 >
               </div>
               <p>
-                I strongly reccomend taking a look into the website and explore
-                it. As you can see in the image above, they have succesfully
-                processed and classified purchases of many public government
-                organizations, marking them with the famous "red flags". Also
-                there are some interesting statistics to explore.
+                Recomendamos encarecidamente echar un vistazo al sitio web y
+                explorarlo. Como puedes ver en la imagen de arriba, han
+                procesado y clasificado con éxito las compras de muchas
+                organizaciones gubernamentales públicas, marcándolas con las
+                famosas "red flags". Además, hay algunas estadísticas
+                interesantes para explorar.
                 <br />
                 <br />
-                Sadly the "Cuentas claras" proyect does not provide the
-                processed data along with the "red flags", and after some failed
-                attempts in contacting the owners, it seems to be abandoned or
-                in standby state.
+                Lamentablemente, el proyecto "Cuentas claras" no proporciona los
+                datos procesados junto con las "red flags", y después de algunos
+                intentos fallidos de ponerse en contacto con los propietarios,
+                parece estar abandonado o en un estado de espera.
                 <br />
                 <br />
-                This is not good news. In order to train a predicting model wee
-                need already labelled data, luckily, the folks at "cuentas
-                claras" <i>kind of</i> described the process they took to flag
-                the organisms in
+                Esta no es una buena noticia. Para entrenar un modelo
+                predictivo, necesitamos datos ya etiquetados. Afortunadamente,
+                las personas en "Cuentas Claras" describieron,
+                <i>de alguna manera</i>, el proceso que llevaron a cabo para
+                marcar las organizaciones en
                 <a href="http://cuentasclaras.uy/#/documentation"
-                  >these documents</a
-                >. Taking this into account, there are two possible paths to
-                continue working on this. We either "manually" label the data by
-                processing it with a similar function to the one used by cuentas
-                claras, or we try to apply clustering algorithms to identify
-                patterns and groupings, and then see if we can notice any odd
-                patterns that may indicate suspicious activity. <br />
-                Or, we may try both approaches.
+                  >estos documentos</a
+                >. Teniendo esto en cuenta, hay dos posibles caminos para
+                continuar trabajando en esto. Podemos "etiquetar" manualmente
+                los datos procesándolos con una función similar a la utilizada
+                por "Cuentas claras", o podemos intentar aplicar algoritmos de
+                agrupamiento para identificar patrones y grupos, y luego ver si
+                podemos notar algún patrón inusual que pueda indicar actividad
+                sospechosa.
+                <br />
+                O bien, podemos intentar ambas aproximaciones.
               </p>
-              <h3 class="major">Manually labelling the data</h3>
-              <p>
-                The idea of labelling the data with a function seems a little
-                odd. Why would we use AI to predict this if we can just use a
-                simple function?
-              </p>
-              <h3 class="major">Applying clustering algorithms</h3>
-              <p>WIP ⚠️</p>
-              <h3 class="major">Interesting sites with useful info:</h3>
+              <h3 class="major">
+                Sitios Intereseantes Con Información Del Tema:
+              </h3>
               <b
                 ><a
                   href="https://docs.google.com/presentation/d/1Fss7T0BcSkq-XnTvSya57R0ul5WvMPaJcyUtKHZg-f4/edit#slide=id.g77e095da88_0_403"
-                  >PPT with interesting info about red flags and how to use OCDS
-                  to find them</a
+                >
+                  Presentación de PowerPoint con información interesante sobre
+                  las señales de alerta ("red flags") y cómo utilizar OCDS para
+                  encontrarlas.</a
                 ></b
               >
               <br />
               <b
                 ><a
                   href="https://docs.google.com/spreadsheets/d/12PFkUlQH09jQvcnORjcbh9-8d-NnIuk4mAQwdGiXeSM/edit#gid=2027439485"
-                  >Excel file with definitions of red flags,
-                  <i>really useful!</i></a
+                  >Archivo de Excel con definiciones de señales de alerta ("red
+                  flags"), <i>¡realmente útil!</i></a
                 ></b
               >
               <b
                 ><a href="https://www.open-contracting.org/data/data-use/#tools"
-                  >Videos from the open contracting.org explaining how to
-                  calculate red flags</a
+                  >Videos de opencontracting.org que explican cómo calcular las
+                  señales de alerta ("red flags").</a
                 ></b
               >
               <br />
               <b
                 ><a
                   href="http://redflags.govtransparency.eu/wp-content/uploads/2019/09/RedFlagFAQs.pdf"
-                  >Frequently asked questions about red flags</a
+                  >Preguntas frecuentes sobre señales de alerta ("red
+                  flags").</a
                 ></b
               >
               <br />
               <b
                 ><a
                   href="https://www.open-contracting.org/wp-content/uploads/2016/11/Red-flags-for-integrity-Giving-the-green-light-to-open-data-solutions-shared.pdf"
-                  >A really long document explainig the usage of OCDS and red
-                  flags in depth</a
+                  >Un documento que explica en profundidad el uso de OCDS y las
+                  señales de alerta ("red flags").</a
                 ></b
               >
               <br />
