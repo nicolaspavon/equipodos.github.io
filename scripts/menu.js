@@ -1,6 +1,6 @@
-const container = document.getElementById("menu");
+const menu = document.getElementById("menu");
 fetch("/components/menu.html")
   .then((response) => response.text())
   .then((content) => {
-    container.innerHTML = content;
+    menu.innerHTML = content;
   });
