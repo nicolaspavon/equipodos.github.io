@@ -78,7 +78,7 @@
       <section id="wrapper">
         <header id="compras-header">
           <div class="inner">
-            <h2>ANALIZANDO COMPRAS DEL GOBIERNO URUGUAYO</h2>
+            <h2>ANALIZANDO COMPRAS DEL GUBERNAMENTALES</h2>
           </div>
         </header>
 
@@ -86,7 +86,7 @@
         <div class="wrapper">
           <div class="inner">
             <section>
-              <h3 class="major">Todo es sobre dinero</h3>
+              <h3 class="major">Por la plata baila el mono</h3>
               <p>
                 En el mundo actual, la corrupción es un problema que afecta a
                 todos los países. Por lo tanto, contar con un estándar para
@@ -98,7 +98,7 @@
                 >, desempeña un papel crucial en descubrir actividades
                 fraudulentas y mal uso financiero por parte del gobierno.
                 Afortunadamente, en Uruguay, este estándar se ha utilizado desde
-                2015 para almacenar una amplia gama de compras gubernamentales,
+                2002 para almacenar una amplia gama de compras gubernamentales,
                 y estos datos están disponibles públicamente de forma gratuita
                 en la página web de
                 <a
@@ -167,6 +167,80 @@
                 <br />
                 O bien, podemos intentar ambas aproximaciones.
               </p>
+              <h3 class="major">Generando los datos objetivo</h3>
+              <p>
+                Utilizando
+                <a
+                  href="https://docs.google.com/spreadsheets/d/12PFkUlQH09jQvcnORjcbh9-8d-NnIuk4mAQwdGiXeSM/edit#gid=245962708"
+                >
+                  la guía
+                </a>
+                provista por la organización
+                <a
+                  href="https://docs.google.com/spreadsheets/d/12PFkUlQH09jQvcnORjcbh9-8d-NnIuk4mAQwdGiXeSM/edit#gid=245962708"
+                  >Open Contracting Partnership</a
+                >
+                sería posible (en teoría) determinar si cierta compra fue
+                "sospechosa", ya que provee una lista con las posibles "banderas
+                rojas", donde se indica que condiciones debe cumplir una compra
+                para generar sospechas.
+                <br />
+                Luego de una breve investigación llegamos a la conclusión de que
+                determinar eso "manualmente" no es buena idea por dos motivos:
+                <ol>
+                  <li>
+                    No estamos calificados para analizar las compras y
+                    determinar actividades sospechosas, ya que pese a contar con
+                    esa guía nunca podríamos saber con presicion si realmente
+                    fue una compra fraudulenta, por falta de contexto
+                  </li>
+                  <li>
+                    Generar todos esos datos es una tarea muy ardua y consumiría
+                    mucho tiempo
+                  </li>
+                </ol>
+              </p>
+              <h3 class="major">Aplicando clustering</h3>
+              <p>Si bien no era la idea inicial, haciendo uso de los algoritmos de clustering podemos estudiar la informacion de distintas formas, y eventualmente lograr extraer conclusiones interesantes</p>
+
+                <h4 class="major"> Selección de datos </h4>
+                *explicar datos del standard, datos de interés, relacion con red flags*
+                                <a
+                  href="
+                https://standard.open-contracting.org/latest/es/schema/release/"
+                  >Atributos del standard</a
+                >
+                                <br />
+                <br />
+                <h4 class="major"> ¿Que hacemos con las relaciones N-1?</h4>
+                *por ahora las ignoramos ya que complejizan el estudio y hay suficientes casos de relacion 1-1*
+                                <br />
+                <br />
+                <h4 class="major">Datos Uruguayos</h4>
+                *tenemos un script que selecciona los datos utiles y los pasa a .csv, probamos con datos de UY, ups.. *
+                                <br />
+                <br />
+                <h4 class="major">Datos BsAs</h4>
+                *una lastima! UY tiene datos en cantidad, pero están incompletos. Este standard se usa en varios paises y el script sirve! probemos con BSAS*
+                <br />
+                                <br />
+                <br />
+                * ...funciona?*
+                                        <div class="col-12">
+                          <span class="image fit"
+                            ><img src="images/compras/cluster.png" alt="" />
+                            <p><i>Duración del período de licitacion vs método de adquisición</i></p></span
+                          >
+                        </div>
+              </p>
+              <h3 class="major">Conclusión</h3>
+                Los datos no ayudaron ¯\_(ツ)_/¯
+                     <br />
+                                <br />
+                                     <br />
+                                <br />
+                <br />
+                <br />
               <h3 class="major">
                 Sitios Intereseantes Con Información Del Tema:
               </h3>
@@ -175,7 +249,7 @@
                   href="https://docs.google.com/presentation/d/1Fss7T0BcSkq-XnTvSya57R0ul5WvMPaJcyUtKHZg-f4/edit#slide=id.g77e095da88_0_403"
                 >
                   Presentación de PowerPoint con información interesante sobre
-                  las señales de alerta ("red flags") y cómo utilizar OCDS para
+                  las banderas rojas ("red flags") y cómo utilizar OCDS para
                   encontrarlas.</a
                 ></b
               >
@@ -183,21 +257,21 @@
               <b
                 ><a
                   href="https://docs.google.com/spreadsheets/d/12PFkUlQH09jQvcnORjcbh9-8d-NnIuk4mAQwdGiXeSM/edit#gid=2027439485"
-                  >Archivo de Excel con definiciones de señales de alerta ("red
+                  >Archivo de Excel con definiciones de banderas rojas ("red
                   flags"), <i>¡realmente útil!</i></a
                 ></b
               >
               <b
                 ><a href="https://www.open-contracting.org/data/data-use/#tools"
                   >Videos de opencontracting.org que explican cómo calcular las
-                  señales de alerta ("red flags").</a
+                  banderas rojas ("red flags").</a
                 ></b
               >
               <br />
               <b
                 ><a
                   href="http://redflags.govtransparency.eu/wp-content/uploads/2019/09/RedFlagFAQs.pdf"
-                  >Preguntas frecuentes sobre señales de alerta ("red
+                  >Preguntas frecuentes sobre banderas rojas ("red
                   flags").</a
                 ></b
               >
@@ -206,7 +280,7 @@
                 ><a
                   href="https://www.open-contracting.org/wp-content/uploads/2016/11/Red-flags-for-integrity-Giving-the-green-light-to-open-data-solutions-shared.pdf"
                   >Un documento que explica en profundidad el uso de OCDS y las
-                  señales de alerta ("red flags").</a
+                  banderas rojas ("red flags").</a
                 ></b
               >
               <br />
