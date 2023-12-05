@@ -186,61 +186,184 @@
                 para generar sospechas.
                 <br />
                 Luego de una breve investigación llegamos a la conclusión de que
-                determinar eso "manualmente" no es buena idea por dos motivos:
-                <ol>
-                  <li>
-                    No estamos calificados para analizar las compras y
-                    determinar actividades sospechosas, ya que pese a contar con
-                    esa guía nunca podríamos saber con presicion si realmente
-                    fue una compra fraudulenta, por falta de contexto
-                  </li>
-                  <li>
-                    Generar todos esos datos es una tarea muy ardua y consumiría
-                    mucho tiempo
-                  </li>
-                </ol>
+                determinar eso caso por caso no es buena idea por dos motivos:
               </p>
+              <ul>
+                <li>
+                  No estamos calificados para analizar las compras y determinar
+                  actividades sospechosas, ya que pese a contar con esa guía
+                  nunca podríamos saber con presicion si realmente fue una
+                  compra fraudulenta, por falta de contexto
+                </li>
+                <li>Generar todos esos datos es una tarea muy ardua y lenta</li>
+              </ul>
               <h3 class="major">Aplicando clustering</h3>
-              <p>Si bien no era la idea inicial, haciendo uso de los algoritmos de clustering podemos estudiar la informacion de distintas formas, y eventualmente lograr extraer conclusiones interesantes</p>
-
-                <h4 class="major"> Selección de datos </h4>
-                *explicar datos del standard, datos de interés, relacion con red flags*
-                                <a
-                  href="
-                https://standard.open-contracting.org/latest/es/schema/release/"
-                  >Atributos del standard</a
-                >
-                                <br />
-                <br />
-                <h4 class="major"> ¿Que hacemos con las relaciones N-1?</h4>
-                *por ahora las ignoramos ya que complejizan el estudio y hay suficientes casos de relacion 1-1*
-                                <br />
-                <br />
-                <h4 class="major">Datos Uruguayos</h4>
-                *tenemos un script que selecciona los datos utiles y los pasa a .csv, probamos con datos de UY, ups.. *
-                                <br />
-                <br />
-                <h4 class="major">Datos BsAs</h4>
-                *una lastima! UY tiene datos en cantidad, pero están incompletos. Este standard se usa en varios paises y el script sirve! probemos con BSAS*
-                <br />
-                                <br />
-                <br />
-                * ...funciona?*
-                                        <div class="col-12">
-                          <span class="image fit"
-                            ><img src="images/compras/cluster.png" alt="" />
-                            <p><i>Duración del período de licitacion vs método de adquisición</i></p></span
-                          >
-                        </div>
+              <p>
+                Si bien no era la idea inicial, haciendo uso de los algoritmos
+                de clustering podemos estudiar la informacion de distintas
+                formas, y eventualmente lograr extraer conclusiones
+                interesantes. In cluso tal vez seamos capaz de destacar ciertas
+                compras con patrones interesantes.. outliers.
               </p>
+              <h4 class="major">Standard OCDS</h4>
+              <p>
+                El estandard OCDS procura almacenar la informacion de los
+                prosesos de compra del gobierno de forma clara, concisa y en
+                detalle. Para esto provee una serie de guías disponibles en su
+                sitio web:
+              </p>
+              <ul>
+                <li>
+                  <a href="https://www.open-contracting.org/es/data-standard/"
+                    >Introducción al estándar</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="https://standard.open-contracting.org/latest/es/schema/release/"
+                    >Guía util para comprender el esquema de datos</a
+                  >
+                </li>
+              </ul>
+              <p>
+                Luego de investigar un poco mas el estandar concluimos en que un
+                proceso de compra está compuesto a grandes rasgos por:
+              </p>
+              <ul>
+                <li>
+                  <b>Una etapa de planificación (Planning)</b>
+                  <ul>
+                    <li>
+                      Información sobre la fase de planeación del proceso de
+                      contratación. Esto incluye información relacionada con el
+                      proceso de decidir qué contratar, cuándo y cómo.
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <b>Una etapa de Licitación (Tender)</b>
+                  <ul>
+                    <li>
+                      Las actividades llevadas a cabo para celebrar un contrato.
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <b>Una etapa de adjudicación (Awards)</b>
+                  <ul>
+                    <li>
+                      Información de la fase adjudicación del proceso de
+                      contrataciones. Puede haber más de una adjudicación por
+                      proceso de contrataciones; por ejemplo, porque el contrato
+                      se divide entre diferentes proveedores, o porque es una
+                      oferta permanente.
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <b>Una etapa de Contratación (Contracts)</b>
+                  <ul>
+                    <li>
+                      Información de la fase de creación del contrato en el
+                      proceso de contratación.
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+              <p>
+                Como se puede observar, esto no es un proceso sencillo. Cuenta
+                de varias etapas en las que no entraremos en profundidad por
+                razones prácticas, pero en un caso ideal podemos concluit que el
+                estandar busca ser verás y completo a la hora de administrar
+                esta información
+              </p>
+              <h4 class="major">Selección de datos</h4>
+              <p>
+                Luego de haber estudiado y comprendido el estandard investigamos
+                un poco mas en profundidad las famosas "Banderas rojas", donde
+                encontramos
+                <a
+                  href="https://docs.google.com/spreadsheets/d/12PFkUlQH09jQvcnORjcbh9-8d-NnIuk4mAQwdGiXeSM/edit#gid=2027439485"
+                  >Guía util para comprender el esquema de datos</a
+                >
+                que explica en detalle varios casos posibles de actividades
+                fraudulentas
+              </p>
+              <p>De esta guía destacamos algunos ejemplos:</p>
+              <ul>
+                <li>
+                  El tiempo disponible para postularse a la licitación es muy
+                  poco (menor a 2 dias)
+                </li>
+                <li>
+                  La licitación no cuenta con un criterio claro para elegir al
+                  postulante ni informacion clave como fechas, presupuesto, etc
+                </li>
+                <li>La licitación es solo por invitación</li>
+              </ul>
+              <p>
+                Estos son los ejemplos mas claros que podemos observar, pero
+                existen 64 posibles banderas rojas en total 🤯
+              </p>
+              <p>
+                Teniendo estas red flags en cuenta y los datos disponibles en el
+                standard hacemos una pre selección de los datos que nos
+                interesan. Esta lista se puede ver en detalle en el repositorio
+                del equipo.
+              </p>
+              <!-- <h4 class="major">¿Que hacemos con las relaciones N-1?</h4>
+              <p>
+                Para estudiar este problema lo mejor será empezar por el camino simple, por lo que
+              </p> -->
+              <h4 class="major">Datos Uruguayos</h4>
+              <p>
+                Una vez que armamos un script para reducir los datos a un csv
+                con información de interés, procesamos los datos disponibles en
+                el sitio de Uruguay y observamos lo peor.. si bien se almacenan
+                datos en cantidad desde 2002, estos datos están imcompletos,
+                conteniendo solo la indormacion de la cantidad de items que se
+                compraron y su precio unitario..
+              </p>
+              <h4 class="major">Datos BsAs</h4>
+              <p>
+                Si bien esto parecía el fin del proyecto, nos acordamos que esto
+                es un estandar internacional y muchos países lo siguen. Luego de
+                hacer una breve investigacion encontramos en su sitio web
+                <a href="https://www.open-contracting.org/worldwide/#/">
+                  un mapa con los países adheridos al estandar</a
+                >, donde observamos a argentina. Entramos a la pagina web de
+                datos argentinos, descargamos el set de datos y luego de
+                procesarlo observamos que contiene muchos mas datos que el set
+                uruguayo.
+              </p>
+              <br />
+              <p>Pero... funciona?</p>
+              <div class="col-12">
+                <span class="image fit"
+                  ><img src="images/compras/cluster.png" alt="" />
+                  <p>
+                    <i
+                      >Duración del período de licitacion vs método de
+                      adquisición</i
+                    >
+                  </p></span
+                >
+              </div>
               <h3 class="major">Conclusión</h3>
-                Los datos no ayudaron ¯\_(ツ)_/¯
-                     <br />
-                                <br />
-                                     <br />
-                                <br />
-                <br />
-                <br />
+              Luego de aplicar algoritmos de clustering obtenemos resultados un
+              poco desalentadores. Entendemos que se detectan patrones, pero
+              nada que nos rersulte interesante a primera vista. Si bien no es
+              el resutlado que esperabamos, destacamos que es una gran
+              herramienta, y con mas conocimiento del problema y datos de
+              calidad, sería posible encontrar anomalias en los procesos de
+              compra de los países.
+
+              <br />
+              <br />
+              ¯\_(ツ)_/¯
+              <br />
+              <br />
+              <br />
               <h3 class="major">
                 Sitios Intereseantes Con Información Del Tema:
               </h3>
@@ -271,8 +394,7 @@
               <b
                 ><a
                   href="http://redflags.govtransparency.eu/wp-content/uploads/2019/09/RedFlagFAQs.pdf"
-                  >Preguntas frecuentes sobre banderas rojas ("red
-                  flags").</a
+                  >Preguntas frecuentes sobre banderas rojas ("red flags").</a
                 ></b
               >
               <br />
